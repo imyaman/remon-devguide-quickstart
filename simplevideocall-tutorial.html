@@ -47,6 +47,8 @@
   <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
   <script>
+    let remonCall;
+    
     const config = {
       credential: {
         serviceId: 'c3941897-8a66-4d3d-bad3-faf70bd67696',
@@ -71,13 +73,12 @@
       onClose() {
         $('#channelState').text("통화 종료");
         console.log(`onClose`);
+        remonCall.close();
+        remonCall = new Remon({config: config, listener: listener});
       }
     }
 
-    const remonCall = new Remon({
-      config: config,
-      listener: listener
-    });
+    remonCall = new Remon({config: config, listener: listener});
 
     $('#startCall').click(function() {
       // connectCall의 인자는 통화채널의 ID입니다. 실제 서비스에서는 동일한 통화채널의 ID가 아닌, 고유하고 예측이 어려운 ID를 사용해야합니다.
