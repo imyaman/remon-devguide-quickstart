@@ -57,6 +57,9 @@
       view: {
         remote: '#remoteVideo',
         local: '#localVideo'
+      },
+      dev:{
+        logLevel: 'ERROR'
       }
     }
     const listener = {
@@ -75,7 +78,11 @@
         remonCall.close();
         if($('#localVideo')[0].srcObject){ $('#localVideo')[0].srcObject=undefined; }
         remonCall = new Remon({config: config, listener: listener});
-      }
+      },
+      onStat(result){
+        const stat = `State: l.cand: ${result.localCandidate} /r.cand: ${result.remoteCandidate} /l.res: ${result.localFrameWidth} x ${result.localFrameHeight} /r.res: ${result.remoteFrameWidth} ${result.remoteFrameHeight} /l.rate: ${result.localFrameRate} /r.rate: ${result.remoteFrameRate} / Health: ${result.rating}`
+        console.log(stat)
+      }      
     }
     remonCall = new Remon({config: config, listener: listener});
     $('#startCall').click(function() {
