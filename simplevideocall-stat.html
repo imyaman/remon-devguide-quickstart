@@ -48,6 +48,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
   <script>
     let remonCall;
+    let myError;
     
     const config = {
       credential: {
@@ -82,7 +83,12 @@
       onStat(result){
         const stat = `State: l.cand: ${result.localCandidate} /r.cand: ${result.remoteCandidate} /l.res: ${result.localFrameWidth} x ${result.localFrameHeight} /r.res: ${result.remoteFrameWidth} ${result.remoteFrameHeight} /l.rate: ${result.localFrameRate} /r.rate: ${result.remoteFrameRate} / Health: ${result.rating}`
         console.log(stat)
-      }      
+      },
+      onError(error) {
+        // Do something
+        console.log(error);
+        myError = error;
+      }
     }
     remonCall = new Remon({config: config, listener: listener});
     $('#startCall').click(function() {
