@@ -36,6 +36,20 @@
           <div id="channelState"></div>
         </div>
       </div>
+      <div >
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Log</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <main id = "log" class="text-center">
+                   
+                </main>
+            </div>
+        </div>
+    </div>
     </div>
   </main>
   <footer>
@@ -45,10 +59,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
   <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
+  <script src="remon.min.js"></script>
   <script>
     let remonCall;
-    
+    const log = document.getElementById("log");
+    log.innerHTML = "";
     const config = {
       credential: {
         serviceId: 'c3941897-8a66-4d3d-bad3-faf70bd67696',
@@ -57,10 +72,29 @@
       view: {
         remote: '#remoteVideo',
         local: '#localVideo'
+      },
+      dev: {
+        logLevel :'VERBOSE'
       }
     }
 
     const listener = {
+      onLog(message){
+        //message 안에 <e> 가 있다면 error log
+        //message 안에 <w> 가 있다면 warning log
+        //message 안에 <g> 가 있다면 
+        //message 안에 <gEnd> 가 있다면 
+        //message 안에 <l> 가 있다면 
+        //message 안에 <i> 가 있다면 info log
+        //message 안에 <d> 가 있다면 debug log
+        //message 안에 <v> 가 있다면 VERBOSE log
+
+        if(message.includes('<d>')){
+          log.innerHTML = log.innerHTML 
+             + message + "<br>"
+        }
+        console.log(message)
+      },
       onConnect(chid) {
         $('#channelId').text(chid);
         $('#channelState').text("대기 중");
@@ -80,7 +114,7 @@
     }
 
     remonCall = new Remon({config: config, listener: listener});
-
+    
     $('#startCall').click(function() {
       // connectCall의 인자는 통화채널의 ID입니다. 실제 서비스에서는 동일한 통화채널의 ID가 아닌, 고유하고 예측이 어려운 ID를 사용해야합니다.
       remonCall.connectCall('my-first-channel');
