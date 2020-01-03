@@ -44,11 +44,21 @@
             </div>
             <!-- Card Body -->
             <div class="card-body">
-                <main id = "log" class="text-center">
-                   
-                </main>
+                <textarea rows="10" cols="80" id = "log" class="text-left">
+                </textarea>
             </div>
         </div>
+        <div class="card shadow mb-4">
+          <!-- Card Header - Dropdown -->
+          <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Stats</h6>
+          </div>
+          <!-- Card Body -->
+          <div class="card-body">
+              <textarea rows="10" cols="80" id = "stats" class="text-left">
+              </textarea>
+          </div>
+      </div>
     </div>
     </div>
   </main>
@@ -63,7 +73,10 @@
   <script>
     let remonCall;
     const log = document.getElementById("log");
+    const stats = document.getElementById("stats");
     log.innerHTML = "";
+    stats.innerHTML = '현재시각'+'\t'+'수신-오디오패킷량'+'\t'+ '수신-비디오패킷량'+'\t'+ '송신-오디오패킷량'+'\t' + '송신-오디오패킷량'+'\t'+ '오디오RTT'+'\t' + '비디오RTT'+'\t'
+             + '비디오프레임레이트'+'\t' + 'remoteAudioTotalSamplesReceived'+'\t'+ 'remoteAudioTotalSamplesDuration' +'\n';
     const config = {
       credential: {
         serviceId: 'c3941897-8a66-4d3d-bad3-faf70bd67696',
@@ -91,9 +104,28 @@
 
         if(message.includes('<d>')){
           log.innerHTML = log.innerHTML 
-             + message + "<br>"
+             + message + "\n"
         }
         console.log(message)
+      },
+      onStat(result){
+             stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss()
+             + "\t"  + result['nowRemoteAPReceived']
+             + "\t"  + result['nowRemoteVPReceived']
+             + "\t"  + result['nowLocalAPSent']
+             + "\t"  + result['nowLocalVPSent']
+             + "\t"  + result['audioRtt']
+             + "\t"  + result['videoRtt']
+             + "\t"  + result['nowRemoteFrameRate']
+             + "\t"  + result['remoteAudioTotalSamplesReceived']
+             + "\t"  + result['remoteAudioTotalSamplesDuration']
+             + "\t"  + result['remoteAudioConcealedSamples']
+             + "\t"  + result['remoteAudioSilentConcealedSamples']
+             + "\t"  + result['remoteAudioConcealmentEvents']
+             + "\t"  + result['remoteAudioInsertedSamplesForDeceleration']
+             + "\t"  + result['remoteAudioRemovedSamplesForAcceleration']
+             + "\n"
+
       },
       onConnect(chid) {
         $('#channelId').text(chid);
@@ -124,6 +156,19 @@
     $('#stopCall').click(function() {
       remonCall.close();
     });
+
+    Date.prototype.yyyymmdd = function() {
+      var yyyy = this.getFullYear().toString();
+      var mm = (this.getMonth() + 1).toString();
+      var dd = this.getDate().toString();
+      return  yyyy + "-" + (mm[1] ? mm : "0" + mm[0]) + "-" + (dd[1] ? dd : "0" + dd[0]);
+    }
+    Date.prototype.hhmmss = function() {
+      var hh = this.getHours().toString();
+      var mm = this.getMinutes().toString();
+      var ss = this.getSeconds().toString();
+      return (hh[1] ? hh : "0" + hh[0]) + ":" + (mm[1] ? mm : "0" + mm[0]) + ":" + (ss[1] ? ss : "0" + ss[0]);
+    }
   </script>
 </body>
 
