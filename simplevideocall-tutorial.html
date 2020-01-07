@@ -102,7 +102,7 @@
         //message 안에 <d> 가 있다면 debug log
         //message 안에 <v> 가 있다면 VERBOSE log
 
-        if(message.includes('<d>')){
+        if(message.includes('<d>') || message.includes('<i>')){
           log.innerHTML = log.innerHTML 
              + message + "\n"
         }
