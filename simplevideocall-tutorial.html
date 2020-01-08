@@ -139,7 +139,7 @@
       onClose() {
         $('#channelState').text("통화 종료");
         console.log(`onClose`);
-        remonCall.close();
+        // remonCall.close();
         if($('#localVideo')[0].srcObject){ $('#localVideo')[0].srcObject=undefined; }
         remonCall = new Remon({config: config, listener: listener});
       }
