@@ -137,19 +137,26 @@
         stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onDisconnectChannel" + "\n";
         console.log(`onDisconnectchannel`);
         remonFree();
+      },
+      onError(e) {
+        stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onError" + ` ${error}` + "\n";
+        console.log(`onError ${error}`);
+        remonFree();
       }
+
     }
 
     
     $('#startCall').click(function() {
       // connectCall의 인자는 통화채널의 ID입니다. 실제 서비스에서는 동일한 통화채널의 ID가 아닌, 고유하고 예측이 어려운 ID를 사용해야합니다.
-      stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "종료 버튼 클릭" + "\n";
+      stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "시작 버튼 클릭" + "\n";
       remonCall = new Remon({config: config, listener: listener});
       remonCall.connectCall('20200110');
     });
 
     // "종료" 버튼을 클릭하면 통화채널에서 나갑니다.
     $('#stopCall').click(function() {
+      stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "종료 버튼 클릭" + "\n";
       remonCall.close();
       if($('#localVideo')[0].srcObject){ $('#localVideo')[0].srcObject=undefined; } // remon.close()가 알아서 하지 않으므로.
     });
