@@ -120,7 +120,8 @@
         $('#channelState').text("대기 중");
         console.log(`onConnect: ${chid}`);
       },
-      onComplete() {
+      onComplete(chid) {
+        $('#channelId').text(chid);
         $('#channelState').text("통화 중");
         console.log(`onComplete`);
       },
