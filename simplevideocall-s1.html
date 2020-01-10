@@ -129,9 +129,9 @@
         $('#channelState').text("통화 종료");
         console.log(`onClose`);
       },
-      onDisconnect() {
+      onDisconnectChannel() {
+        $('#channelState').text("연결이 끊겼습니다.");
         remonFree();
-        $('#channelState').text("연결이 끊겼습니다");
       }
     }
 
