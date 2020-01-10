@@ -36,7 +36,19 @@
           <div id="channelState"></div>
         </div>
       </div>
+
       <div >
+        <div class="card shadow mb-4">
+          <!-- Card Header - Dropdown -->
+          <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Stats</h6>
+          </div>
+          <!-- Card Body -->
+          <div class="card-body">
+              <textarea id="stats" class="text-left" rows="10" cols="40">
+              </textarea>
+          </div>
+        </div>
         <div class="card shadow mb-4">
             <!-- Card Header - Dropdown -->
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -48,17 +60,8 @@
                 </textarea>
             </div>
         </div>
-        <div class="card shadow mb-4">
-          <!-- Card Header - Dropdown -->
-          <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-              <h6 class="m-0 font-weight-bold text-primary">Stats</h6>
-          </div>
-          <!-- Card Body -->
-          <div class="card-body">
-              <textarea id="stats" class="text-left" rows="10" cols="40">
-              </textarea>
-          </div>
       </div>
+
     </div>
     </div>
   </main>
@@ -93,11 +96,12 @@
 
     const listener = {
       onLog(message){
-        log.innerHTML = log.innerHTML + message + "\n";
+        log.innerHTML = message + "\n" + log.innerHTML;
         console.log(message)
       },
+
       onStat(result){
-             stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss()
+             stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss()
              + ", "  + result['nowRemoteAPReceived']
              + ", "  + result['nowRemoteVPReceived']
              + ", "  + result['nowLocalAPSent']
@@ -113,31 +117,36 @@
              + ", "  + result['remoteAudioInsertedSamplesForDeceleration']
              + ", "  + result['remoteAudioRemovedSamplesForAcceleration']
              + "\n"
-
+             + stats.innerHTML ;
       },
+
       onConnect(chid) {
         stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onConnect" + "\n";
         $('#channelId').text(chid);
         $('#channelState').text("대기 중");
         console.log(`onConnect: ${chid}`);
       },
+
       onComplete(chid) {
         stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onComplete" + "\n";
         $('#channelId').text(chid);
         $('#channelState').text("통화 중");
         console.log(`onComplete`);
       },
+
       onClose() {
         stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onClose" + "\n";
         $('#channelState').text("통화 종료");
         console.log(`onClose`);
       },
+
       onDisconnectChannel() {
         $('#channelId').text("네트워크 연결 문제");
         stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onDisconnectChannel" + "\n";
         console.log(`onDisconnectchannel`);
         remonFree();
       },
+
       onError(e) {
         stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onError" + ` ${error}` + "\n";
         console.log(`onError ${error}`);
