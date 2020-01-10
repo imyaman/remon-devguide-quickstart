@@ -75,8 +75,8 @@
     const log = document.getElementById("log");
     const stats = document.getElementById("stats");
     log.innerHTML = "";
-    stats.innerHTML = '현재시각'+'\t'+'수신-오디오패킷량'+'\t'+ '수신-비디오패킷량'+'\t'+ '송신-오디오패킷량'+'\t' + '송신-오디오패킷량'+'\t'+ '오디오RTT'+'\t' + '비디오RTT'+'\t'
-             + '비디오프레임레이트'+'\t' + 'remoteAudioTotalSamplesReceived'+'\t'+ 'remoteAudioTotalSamplesDuration' +'\n';
+    stats.innerHTML = '현재시각'+', '+'수신-오디오패킷량'+', '+ '수신-비디오패킷량'+', '+ '송신-오디오패킷량'+', ' + '송신-오디오패킷량'+', '+ '오디오RTT'+', ' + '비디오RTT'+', '
+             + '비디오프레임레이트'+', ' + 'remoteAudioTotalSamplesReceived'+', '+ 'remoteAudioTotalSamplesDuration' +'\n';
     const config = {
       credential: {
         serviceId: 'c3941897-8a66-4d3d-bad3-faf70bd67696',
@@ -98,39 +98,44 @@
       },
       onStat(result){
              stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss()
-             + "\t"  + result['nowRemoteAPReceived']
-             + "\t"  + result['nowRemoteVPReceived']
-             + "\t"  + result['nowLocalAPSent']
-             + "\t"  + result['nowLocalVPSent']
-             + "\t"  + result['audioRtt']
-             + "\t"  + result['videoRtt']
-             + "\t"  + result['nowRemoteFrameRate']
-             + "\t"  + result['remoteAudioTotalSamplesReceived']
-             + "\t"  + result['remoteAudioTotalSamplesDuration']
-             + "\t"  + result['remoteAudioConcealedSamples']
-             + "\t"  + result['remoteAudioSilentConcealedSamples']
-             + "\t"  + result['remoteAudioConcealmentEvents']
-             + "\t"  + result['remoteAudioInsertedSamplesForDeceleration']
-             + "\t"  + result['remoteAudioRemovedSamplesForAcceleration']
+             + ", "  + result['nowRemoteAPReceived']
+             + ", "  + result['nowRemoteVPReceived']
+             + ", "  + result['nowLocalAPSent']
+             + ", "  + result['nowLocalVPSent']
+             + ", "  + result['audioRtt']
+             + ", "  + result['videoRtt']
+             + ", "  + result['nowRemoteFrameRate']
+             + ", "  + result['remoteAudioTotalSamplesReceived']
+             + ", "  + result['remoteAudioTotalSamplesDuration']
+             + ", "  + result['remoteAudioConcealedSamples']
+             + ", "  + result['remoteAudioSilentConcealedSamples']
+             + ", "  + result['remoteAudioConcealmentEvents']
+             + ", "  + result['remoteAudioInsertedSamplesForDeceleration']
+             + ", "  + result['remoteAudioRemovedSamplesForAcceleration']
              + "\n"
 
       },
       onConnect(chid) {
+        stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onConnect" + "\n";
         $('#channelId').text(chid);
         $('#channelState').text("대기 중");
         console.log(`onConnect: ${chid}`);
       },
       onComplete(chid) {
+        stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onComplete" + "\n";
         $('#channelId').text(chid);
         $('#channelState').text("통화 중");
         console.log(`onComplete`);
       },
       onClose() {
-        $('#channelState').text("통화 종료 (사용자 요청에 의해)");
+        stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onClose" + "\n";
+        $('#channelState').text("통화 종료");
         console.log(`onClose`);
       },
       onDisconnectChannel() {
-        $('#channelState').text("통화 종료 (네트워크 연결 문제로 인해) ");
+        $('#channelId').text("네트워크 연결 문제");
+        stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onDisconnectChannel" + "\n";
+        console.log(`onDisconnectchannel`);
         remonFree();
       }
     }
@@ -138,6 +143,7 @@
     
     $('#startCall').click(function() {
       // connectCall의 인자는 통화채널의 ID입니다. 실제 서비스에서는 동일한 통화채널의 ID가 아닌, 고유하고 예측이 어려운 ID를 사용해야합니다.
+      stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "종료 버튼 클릭" + "\n";
       remonCall = new Remon({config: config, listener: listener});
       remonCall.connectCall('20200110');
     });
