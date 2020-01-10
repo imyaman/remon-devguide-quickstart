@@ -126,11 +126,11 @@
         console.log(`onComplete`);
       },
       onClose() {
-        $('#channelState').text("통화 종료");
+        $('#channelState').text("통화 종료 (사용자 요청에 의해)");
         console.log(`onClose`);
       },
       onDisconnectChannel() {
-        $('#channelState').text("연결이 끊겼습니다.");
+        $('#channelState').text("통화 종료 (네트워크 연결 문제로 인해) ");
         remonFree();
       }
     }
@@ -145,6 +145,7 @@
     // "종료" 버튼을 클릭하면 통화채널에서 나갑니다.
     $('#stopCall').click(function() {
       remonCall.close();
+      if($('#localVideo')[0].srcObject){ $('#localVideo')[0].srcObject=undefined; } // remon.close()가 알아서 하지 않으므로.
     });
 
     Date.prototype.yyyymmdd = function() {
@@ -166,6 +167,8 @@
         track.stop();
       });
       if($('#localVideo')[0].srcObject){ $('#localVideo')[0].srcObject=undefined; }
+
+      // remonCall=undefined; 자원을 해제하자면 해야하지만, 우리는 살펴봐야하므로.
     }
   </script>
 </body>
