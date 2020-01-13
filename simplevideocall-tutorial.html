@@ -135,6 +135,10 @@
       onComplete() {
         $('#channelState').text("통화 중");
         console.log(`onComplete`);
+      }, 
+      onError(error) {
+        console.log(`EVENT FIRED: onError: ${error}`);
+        alert(`Error: ${error}`);
       },
       onClose() {
         $('#channelState').text("통화 종료");

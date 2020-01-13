@@ -150,6 +150,7 @@
       onError(e) {
         stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onError" + ` ${error}` + "\n";
         console.log(`onError ${error}`);
+        alert(`Error: ${error}`);
         remonFree();
       }
 
