@@ -36,18 +36,8 @@
           <div id="channelState"></div>
         </div>
       </div>
+
       <div >
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Log</h6>
-            </div>
-            <!-- Card Body -->
-            <div class="card-body">
-                <textarea rows="10" cols="80" id = "log" class="text-left">
-                </textarea>
-            </div>
-        </div>
         <div class="card shadow mb-4">
           <!-- Card Header - Dropdown -->
           <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -55,10 +45,23 @@
           </div>
           <!-- Card Body -->
           <div class="card-body">
-              <textarea rows="10" cols="80" id = "stats" class="text-left">
+              <textarea id="stats" class="text-left" rows="3" cols="40">
               </textarea>
           </div>
+        </div>
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Log</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <textarea id="log" class="text-left" rows="3" cols="40">
+                </textarea>
+            </div>
+        </div>
       </div>
+
     </div>
     </div>
   </main>
@@ -75,90 +78,97 @@
     const log = document.getElementById("log");
     const stats = document.getElementById("stats");
     log.innerHTML = "";
-    stats.innerHTML = '현재시각'+'\t'+'수신-오디오패킷량'+'\t'+ '수신-비디오패킷량'+'\t'+ '송신-오디오패킷량'+'\t' + '송신-오디오패킷량'+'\t'+ '오디오RTT'+'\t' + '비디오RTT'+'\t'
-             + '비디오프레임레이트'+'\t' + 'remoteAudioTotalSamplesReceived'+'\t'+ 'remoteAudioTotalSamplesDuration' +'\n';
+    stats.innerHTML = '현재시각'+', '+'수신-오디오패킷량'+', '+ '수신-비디오패킷량'+', '+ '송신-오디오패킷량'+', ' + '송신-비디오패킷량'+', '+ '오디오RTT'+', ' + '비디오RTT'+', '
+             + '비디오프레임레이트'+', ' + 'remoteAudioTotalSamplesReceived'+', '+ 'remoteAudioTotalSamplesDuration' +'\n';
     const config = {
       credential: {
-        serviceId: 'c3941897-8a66-4d3d-bad3-faf70bd67696',
-        key: '0a1a858e6e6620e63a63bd78b01a1e238ed2ae6993dd3f2cd982f8c78413c585'
+        serviceId: 'sangyong.gwak@devopskorea.org',
+        key: '4caa69d31d429f72fcb411ee9ce313365439639365c4c981'
       },
       view: {
         remote: '#remoteVideo',
         local: '#localVideo'
       },
       dev: {
-        logLevel :'VERBOSE'
+        logLevel :'WARN'
       }
     }
 
     const listener = {
       onLog(message){
-        //message 안에 <e> 가 있다면 error log
-        //message 안에 <w> 가 있다면 warning log
-        //message 안에 <g> 가 있다면 
-        //message 안에 <gEnd> 가 있다면 
-        //message 안에 <l> 가 있다면 
-        //message 안에 <i> 가 있다면 info log
-        //message 안에 <d> 가 있다면 debug log
-        //message 안에 <v> 가 있다면 VERBOSE log
-
-        if(message.includes('<d>') || message.includes('<i>')){
-          log.innerHTML = log.innerHTML 
-             + message + "\n"
-        }
+        log.innerHTML = message + "\n" + log.innerHTML;
         console.log(message)
       },
-      onStat(result){
-             stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss()
-             + "\t"  + result['nowRemoteAPReceived']
-             + "\t"  + result['nowRemoteVPReceived']
-             + "\t"  + result['nowLocalAPSent']
-             + "\t"  + result['nowLocalVPSent']
-             + "\t"  + result['audioRtt']
-             + "\t"  + result['videoRtt']
-             + "\t"  + result['nowRemoteFrameRate']
-             + "\t"  + result['remoteAudioTotalSamplesReceived']
-             + "\t"  + result['remoteAudioTotalSamplesDuration']
-             + "\t"  + result['remoteAudioConcealedSamples']
-             + "\t"  + result['remoteAudioSilentConcealedSamples']
-             + "\t"  + result['remoteAudioConcealmentEvents']
-             + "\t"  + result['remoteAudioInsertedSamplesForDeceleration']
-             + "\t"  + result['remoteAudioRemovedSamplesForAcceleration']
-             + "\n"
 
+      onStat(result){
+             stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss()
+             + ", "  + result['nowRemoteAPReceived']
+             + ", "  + result['nowRemoteVPReceived']
+             + ", "  + result['nowLocalAPSent']
+             + ", "  + result['nowLocalVPSent']
+             + ", "  + result['audioRtt']
+             + ", "  + result['videoRtt']
+             + ", "  + result['nowRemoteFrameRate']
+             + ", "  + result['remoteAudioTotalSamplesReceived']
+             + ", "  + result['remoteAudioTotalSamplesDuration']
+             + ", "  + result['remoteAudioConcealedSamples']
+             + ", "  + result['remoteAudioSilentConcealedSamples']
+             + ", "  + result['remoteAudioConcealmentEvents']
+             + ", "  + result['remoteAudioInsertedSamplesForDeceleration']
+             + ", "  + result['remoteAudioRemovedSamplesForAcceleration']
+             + "\n"
+             + stats.innerHTML ;
       },
+
       onConnect(chid) {
+        stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onConnect" + "\n";
         $('#channelId').text(chid);
         $('#channelState').text("대기 중");
         console.log(`onConnect: ${chid}`);
       },
-      onComplete() {
+
+      onComplete(chid) {
+        stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onComplete" + "\n";
+        $('#channelId').text(chid);
         $('#channelState').text("통화 중");
         console.log(`onComplete`);
-      }, 
-      onError(error) {
-        console.log(`EVENT FIRED: onError: ${error}`);
-        alert(`Error: ${error}`);
       },
+
       onClose() {
+        stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onClose" + "\n";
         $('#channelState').text("통화 종료");
         console.log(`onClose`);
-        // remonCall.close();
-        if($('#localVideo')[0].srcObject){ $('#localVideo')[0].srcObject=undefined; }
-        // remonCall = new Remon({config: config, listener: listener});
+      },
+
+      onDisconnectChannel() {
+        $('#channelId').text("네트워크 연결 문제");
+        stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onDisconnectChannel" + "\n";
+        console.log(`onDisconnectchannel`);
+        remonFree();
+      },
+
+      onError(e) {
+        stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onError" + ` ${error}` + "\n";
+        console.log(`onError ${error}`);
+        alert(`Error: ${error}`);
+        remonFree();
       }
+
     }
 
     
     $('#startCall').click(function() {
       // connectCall의 인자는 통화채널의 ID입니다. 실제 서비스에서는 동일한 통화채널의 ID가 아닌, 고유하고 예측이 어려운 ID를 사용해야합니다.
+      stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "시작 버튼 클릭" + "\n";
       remonCall = new Remon({config: config, listener: listener});
-      remonCall.connectCall('my-first-channel');
+      remonCall.connectCall('20200110');
     });
 
     // "종료" 버튼을 클릭하면 통화채널에서 나갑니다.
     $('#stopCall').click(function() {
+      stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "종료 버튼 클릭" + "\n";
       remonCall.close();
+      if($('#localVideo')[0].srcObject){ $('#localVideo')[0].srcObject=undefined; } // remon.close()가 알아서 하지 않으므로.
     });
 
     Date.prototype.yyyymmdd = function() {
@@ -172,6 +182,16 @@
       var mm = this.getMinutes().toString();
       var ss = this.getSeconds().toString();
       return (hh[1] ? hh : "0" + hh[0]) + ":" + (mm[1] ? mm : "0" + mm[0]) + ":" + (ss[1] ? ss : "0" + ss[0]);
+    }
+
+    function remonFree(){
+      let tracks = remonCall.config.rtc.localStream.getTracks();
+      tracks.forEach(function(track) {
+        track.stop();
+      });
+      if($('#localVideo')[0].srcObject){ $('#localVideo')[0].srcObject=undefined; }
+
+      // remonCall=undefined; 자원을 해제하자면 해야하지만, 우리는 살펴봐야하므로.
     }
   </script>
 </body>
