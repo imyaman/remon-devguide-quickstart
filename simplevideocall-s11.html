@@ -79,7 +79,14 @@
     const stats = document.getElementById("stats");
     log.innerHTML = "";
     stats.innerHTML = '현재시각'+', '+'수신-오디오패킷량'+', '+ '수신-비디오패킷량'+', '+ '송신-오디오패킷량'+', ' + '송신-비디오패킷량'+', '+ '오디오RTT'+', ' + '비디오RTT'+', '
-             + '비디오프레임레이트'+', ' + 'remoteAudioTotalSamplesReceived'+', '+ 'remoteAudioTotalSamplesDuration' +'\n';
+    + '비디오프레임레이트'+', '+ 
+    'remoteAudioTotalSamplesReceived'+', '+ 
+    'remoteAudioTotalSamplesDuration'+', '+
+    'remoteAudioConcealedSamples'+', ' +
+    'remoteAudioSilentConcealedSamples'+', '+
+    'remoteAudioConcealmentEvents'+', '+
+    'remoteAudioInsertedSamplesForDeceleration'+', '+
+    'remoteAudioRemovedSamplesForAcceleration'+'\n';
     const config = {
       credential: {
         serviceId: 'c3941897-8a66-4d3d-bad3-faf70bd67696',
