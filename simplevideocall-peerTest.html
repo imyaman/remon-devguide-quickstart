@@ -103,13 +103,14 @@
       },
 
       onStat(result){
-             stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss()
+             stats.innerHTML = 
+             stats.innerHTML
+             +new Date().yyyymmdd() + 'T' + new Date().hhmmss()
              + ", "  + result['nowRemoteAPReceived']
              + ", "  + result['nowRemoteVPReceived']
              + ", "  + result['nowLocalAPSent']
              + ", "  + result['nowLocalVPSent']
              + "\n"
-             + stats.innerHTML;
              ;
       },
 
