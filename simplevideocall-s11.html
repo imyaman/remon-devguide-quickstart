@@ -155,7 +155,7 @@
         remonFree();
       },
 
-      onError(e) {
+      onError(error) {
         stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onError" + ` ${error}` + "\n" + stats.innerHTML;
         console.log(`onError ${error}`);
         alert(`Error: ${error}`);
