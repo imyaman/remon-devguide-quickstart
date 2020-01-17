@@ -104,14 +104,15 @@
     const listener = {
       onLog(message){
         if(message.includes('<t>')){
-          log.innerHTML = log.innerHTML 
-             + message + "\n"
-             console.log(message)
+          log.innerHTML = 
+             +new Date().yyyymmdd() + ' T ' + new Date().hhmmss()+ message + "\n" + log.innerHTML;
+        }else{
+          stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss()+ message + "\n" + stats.innerHTML;
         }
       },
 
       onStat(result){
-        stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss()
+        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss()
              + ", "  + result['nowRemoteAPReceived']
              + ", "  + result['nowRemoteVPReceived']
              + ", "  + result['nowLocalAPSent']
