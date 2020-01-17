@@ -97,7 +97,7 @@
       onLog(message){
         if(message.includes('<t>')){
           log.innerHTML = log.innerHTML 
-             + JSON.stringify(message) + "\n"
+             + message + "\n"
         }
         console.log(message)
       },
