@@ -105,7 +105,7 @@
       onLog(message){
         if(message.includes('<t>')){
           log.innerHTML = 
-             + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + message + "\n" + log.innerHTML;
+             new Date().yyyymmdd() + 'T' + new Date().hhmmss() + message + "\n" + log.innerHTML;
         }else{
           stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss() + message + "\n" + stats.innerHTML;
         }
