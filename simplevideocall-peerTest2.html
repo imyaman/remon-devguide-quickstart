@@ -154,8 +154,8 @@
 
       onDisconnectChannel() {
         $('#channelId').text("네트워크 연결 문제");
-        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onDisconnectChannel" + "\n" + stats.innerHTML;
-        console.log(`onDisconnectchannel`);
+        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onDisconnectChannel" + ` : ${m.message}, ${m.closeType}` + "\n" + stats.innerHTML;
+        console.log(`onDisconnectchannel : ${m.message}, ${m.closeType}`);
         remonFree();
       },
 
