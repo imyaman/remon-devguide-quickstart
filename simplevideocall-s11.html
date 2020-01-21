@@ -148,10 +148,12 @@
         console.log(`onClose`);
       },
 
-      onDisconnectChannel() {
+      onDisconnectChannel(m) {
         $('#channelId').text("네트워크 연결 문제");
         stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onDisconnectChannel" + "\n" + stats.innerHTML;
         console.log(`onDisconnectchannel`);
+        console.log(`Disconnect Message: ${m}.message`);
+        console.log(`Disconnect Type:: ${m.closeType}`);
         remonFree();
       },
 
