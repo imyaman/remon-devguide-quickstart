@@ -45,7 +45,7 @@
           </div>
           <!-- Card Body -->
           <div class="card-body">
-              <textarea id="stats" class="text-left" rows="3" cols="40">
+              <textarea id="stats" class="text-left" style="width: 100%; height: 4rem;">
               </textarea>
           </div>
         </div>
@@ -56,7 +56,7 @@
             </div>
             <!-- Card Body -->
             <div class="card-body">
-                <textarea id="log" class="text-left" rows="3" cols="40">
+                <textarea id="log" class="text-left" style="width: 100%; height: 4rem;">
                 </textarea>
             </div>
         </div>
@@ -78,8 +78,7 @@
     const log = document.getElementById("log");
     const stats = document.getElementById("stats");
     log.innerHTML = "";
-    stats.innerHTML = '현재시각'+', '+'수신-오디오패킷량'+', '+ '수신-비디오패킷량'+', '+ '송신-오디오패킷량'+', ' + '송신-비디오패킷량'+', '+ '오디오RTT'+', ' + '비디오RTT'+', '
-             + '비디오프레임레이트'+', ' + 'remoteAudioTotalSamplesReceived'+', '+ 'remoteAudioTotalSamplesDuration' +'\n';
+    stats.innerHTML = '현재시각'+', '+'수신-오디오패킷량'+', '+ '수신-비디오패킷량'+', '+ '송신-오디오패킷량'+', ' + '송신-비디오패킷량' + '\n';
     const config = {
       credential: {
         serviceId: 'c3941897-8a66-4d3d-bad3-faf70bd67696',
@@ -117,38 +116,38 @@
              + ", "  + result['remoteAudioInsertedSamplesForDeceleration']
              + ", "  + result['remoteAudioRemovedSamplesForAcceleration']
              + "\n"
-             + stats.innerHTML ;
+             + stats.innerHTML;
       },
 
       onConnect(chid) {
-        stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onConnect" + "\n";
+        stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onConnect" + "\n" + stats.innerHTML;
         $('#channelId').text(chid);
         $('#channelState').text("대기 중");
         console.log(`onConnect: ${chid}`);
       },
 
       onComplete(chid) {
-        stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onComplete" + "\n";
+        stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onComplete" + "\n" + stats.innerHTML;
         $('#channelId').text(chid);
         $('#channelState').text("통화 중");
         console.log(`onComplete`);
       },
 
       onClose() {
-        stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onClose" + "\n";
+        stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onClose" + "\n" + stats.innerHTML;
         $('#channelState').text("통화 종료");
         console.log(`onClose`);
       },
 
       onDisconnectChannel() {
         $('#channelId').text("네트워크 연결 문제");
-        stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onDisconnectChannel" + "\n";
+        stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onDisconnectChannel" + "\n" + stats.innerHTML;
         console.log(`onDisconnectchannel`);
         remonFree();
       },
 
       onError(error) {
-        stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onError" + ` ${error}` + "\n";
+        stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onError" + ` ${error}` + "\n" + stats.innerHTML;
         console.log(`onError ${error}`);
         alert(`Error: ${error}`);
         remonFree();
@@ -159,14 +158,14 @@
     
     $('#startCall').click(function() {
       // connectCall의 인자는 통화채널의 ID입니다. 실제 서비스에서는 동일한 통화채널의 ID가 아닌, 고유하고 예측이 어려운 ID를 사용해야합니다.
-      stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "시작 버튼 클릭" + "\n";
+      stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "시작 버튼 클릭" + "\n" + stats.innerHTML;
       remonCall = new Remon({config: config, listener: listener});
       remonCall.connectCall('20200110');
     });
 
     // "종료" 버튼을 클릭하면 통화채널에서 나갑니다.
     $('#stopCall').click(function() {
-      stats.innerHTML = stats.innerHTML + new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "종료 버튼 클릭" + "\n";
+      stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "종료 버튼 클릭" + "\n" + stats.innerHTML;
       remonCall.close();
       if($('#localVideo')[0].srcObject){ $('#localVideo')[0].srcObject=undefined; } // remon.close()가 알아서 하지 않으므로.
     });
@@ -190,6 +189,13 @@
         track.stop();
       });
       if($('#localVideo')[0].srcObject){ $('#localVideo')[0].srcObject=undefined; }
+
+      tracks = remonCall.media.context.remoteStream.getTracks();
+      tracks.forEach(function(track) {
+        track.stop();
+      });
+
+      if($('#remoteVideo')[0].srcObject){ $('#remoteVideo')[0].srcObject=undefined; }
 
       // remonCall=undefined; 자원을 해제하자면 해야하지만, 우리는 살펴봐야하므로.
     }
