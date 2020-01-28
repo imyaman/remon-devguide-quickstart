@@ -103,7 +103,7 @@
 
     const listener = {
       onLog(message){
-        if(message.includes('<t>')){
+        if(message.includes('<t>') || message.includes('<w>')){
           stats.innerHTML = 
              new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ', ' + message + "\n" + stats.innerHTML;
         }else{
