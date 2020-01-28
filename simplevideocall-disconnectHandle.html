@@ -111,25 +111,26 @@
         }
       },
 
+
       onStat(result){
-        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss()
-             + ", "  + result['nowRemoteAPReceived']
-             + ", "  + result['nowRemoteVPReceived']
-             + ", "  + result['nowLocalAPSent']
-             + ", "  + result['nowLocalVPSent']
-             + ", "  + result['audioRtt']
-             + ", "  + result['videoRtt']
-             + ", "  + result['nowRemoteFrameRate']
-             + ", "  + result['remoteAudioTotalSamplesReceived']
-             + ", "  + result['remoteAudioTotalSamplesDuration']
-             + ", "  + result['remoteAudioConcealedSamples']
-             + ", "  + result['remoteAudioSilentConcealedSamples']
-             + ", "  + result['remoteAudioConcealmentEvents']
-             + ", "  + result['remoteAudioInsertedSamplesForDeceleration']
-             + ", "  + result['remoteAudioRemovedSamplesForAcceleration']
-             + "\n"
-             + stats.innerHTML;
-             ;
+        // stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss()
+        //      + ", "  + result['nowRemoteAPReceived']
+        //      + ", "  + result['nowRemoteVPReceived']
+        //      + ", "  + result['nowLocalAPSent']
+        //      + ", "  + result['nowLocalVPSent']
+        //      + ", "  + result['audioRtt']
+        //      + ", "  + result['videoRtt']
+        //      + ", "  + result['nowRemoteFrameRate']
+        //      + ", "  + result['remoteAudioTotalSamplesReceived']
+        //      + ", "  + result['remoteAudioTotalSamplesDuration']
+        //      + ", "  + result['remoteAudioConcealedSamples']
+        //      + ", "  + result['remoteAudioSilentConcealedSamples']
+        //      + ", "  + result['remoteAudioConcealmentEvents']
+        //      + ", "  + result['remoteAudioInsertedSamplesForDeceleration']
+        //      + ", "  + result['remoteAudioRemovedSamplesForAcceleration']
+        //      + "\n"
+        //      + stats.innerHTML;
+        //      ;
       },
 
       onConnect(chid) {
