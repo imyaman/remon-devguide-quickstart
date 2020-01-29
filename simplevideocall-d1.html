@@ -184,18 +184,21 @@
     }
 
     function remonFree(){
-      let tracks = remonCall.config.rtc.localStream.getTracks();
-      tracks.forEach(function(track) {
-        track.stop();
-      });
-      if($('#localVideo')[0].srcObject){ $('#localVideo')[0].srcObject=undefined; }
+      if(remonCall.config.rtc.localStream){
+        let tracks = remonCall.config.rtc.localStream.getTracks();
+        tracks.forEach(function(track) {
+          track.stop();
+        });
+        if($('#localVideo')[0].srcObject){ $('#localVideo')[0].srcObject=undefined; }
+      }
 
-      tracks = remonCall.media.context.remoteStream.getTracks();
-      tracks.forEach(function(track) {
-        track.stop();
-      });
-
-      if($('#remoteVideo')[0].srcObject){ $('#remoteVideo')[0].srcObject=undefined; }
+      if(remonCall.media.context.remoteStream){
+        tracks = remonCall.media.context.remoteStream.getTracks();
+        tracks.forEach(function(track) {
+          track.stop();
+        });
+        if($('#remoteVideo')[0].srcObject){ $('#remoteVideo')[0].srcObject=undefined; }
+      }
 
       // remonCall=undefined; 자원을 해제하자면 해야하지만, 우리는 살펴봐야하므로.
     }
