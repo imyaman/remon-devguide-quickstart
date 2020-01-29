@@ -72,7 +72,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
   <script src="adapter-latest.js"></script>
-  <script src="remon.min-quality-middle.js"></script>
+  <script src="remon.min.peerTest.js"></script>
   <script>
     let remonCall;
     const log = document.getElementById("log");
@@ -89,8 +89,8 @@
     'remoteAudioRemovedSamplesForAcceleration'+'\n';
     const config = {
       credential: {
-        serviceId: 'c3941897-8a66-4d3d-bad3-faf70bd67696',
-        key: '0a1a858e6e6620e63a63bd78b01a1e238ed2ae6993dd3f2cd982f8c78413c585'
+        serviceId: 'ad021c3c-f333-4f9a-9a47-66f838ed44e2',
+        key: '44fe44e793b4acc59806916133d937bc9debea9690595caf39eae9c043aec4c0'
       },
       view: {
         remote: '#remoteVideo',
@@ -103,12 +103,16 @@
 
     const listener = {
       onLog(message){
-        log.innerHTML = message + "\n" + log.innerHTML;
-        console.log(message)
+        if(message.includes('<t>')){
+          stats.innerHTML = 
+             new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ', ' + message + "\n" + stats.innerHTML;
+        }else{
+          log.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + message + "\n" + log.innerHTML;
+        }
       },
 
       onStat(result){
-             stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss()
+        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss()
              + ", "  + result['nowRemoteAPReceived']
              + ", "  + result['nowRemoteVPReceived']
              + ", "  + result['nowLocalAPSent']
@@ -129,39 +133,33 @@
       },
 
       onConnect(chid) {
-        stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onConnect" + "\n" + stats.innerHTML;
+        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onConnect" + "\n" + stats.innerHTML;
         $('#channelId').text(chid);
         $('#channelState').text("대기 중");
         console.log(`onConnect: ${chid}`);
       },
 
       onComplete(chid) {
-        stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onComplete" + "\n" + stats.innerHTML;
+        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onComplete" + "\n" + stats.innerHTML;
         $('#channelId').text(chid);
         $('#channelState').text("통화 중");
         console.log(`onComplete`);
       },
 
       onClose() {
-        stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onClose" + "\n" + stats.innerHTML;
-        $('#channelState').text("통화 종료");
+        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onClose" + "\n" + stats.innerHTML;
         console.log(`onClose`);
       },
 
-      onDisconnectChannel(m) {
+      onDisconnectChannel() {
         $('#channelId').text("네트워크 연결 문제");
-        stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onDisconnectChannel" + "\n" + stats.innerHTML;
-        console.log(`onDisconnectchannel`);
-        console.log(`Disconnect Message: ${m.message}`);
-        console.log(`Disconnect Type:: ${m.closeType}`);
-        remonFree();
+        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onDisconnectChannel" + ` : ${m.message}, ${m.closeType}` + "\n" + stats.innerHTML;
+        console.log(`onDisconnectchannel : ${m.message}, ${m.closeType}`);
       },
 
       onError(error) {
-        stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "콜백 onError" + ` ${error}` + "\n" + stats.innerHTML;
+        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onError" + ` : ${error}` + "\n" + stats.innerHTML;
         console.log(`onError ${error}`);
-        alert(`Error: ${error}`);
-        remonFree();
       }
 
     }
@@ -169,16 +167,17 @@
     
     $('#startCall').click(function() {
       // connectCall의 인자는 통화채널의 ID입니다. 실제 서비스에서는 동일한 통화채널의 ID가 아닌, 고유하고 예측이 어려운 ID를 사용해야합니다.
-      stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "시작 버튼 클릭" + "\n" + stats.innerHTML;
+      stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "시작 버튼 클릭" + "\n" + stats.innerHTML;
       remonCall = new Remon({config: config, listener: listener});
-      remonCall.connectCall('20200110');
+      remonCall.connectCall('peerTest');
     });
 
     // "종료" 버튼을 클릭하면 통화채널에서 나갑니다.
     $('#stopCall').click(function() {
-      stats.innerHTML = new Date().yyyymmdd() + 'T' + new Date().hhmmss() + ", " + "종료 버튼 클릭" + "\n" + stats.innerHTML;
+      stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "종료 버튼 클릭" + "\n" + stats.innerHTML;
       remonCall.close();
-      if($('#localVideo')[0].srcObject){ $('#localVideo')[0].srcObject=undefined; } // remon.close()가 알아서 하지 않으므로.
+      remonFree();
+      $('#channelState').text("통화 종료");
     });
 
     Date.prototype.yyyymmdd = function() {

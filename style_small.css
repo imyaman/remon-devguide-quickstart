@@ -18,11 +18,15 @@
 
 .localVideo {
   background: purple;
-  width: 240px;
-  height: 135px;
+  width: 128px;
+  height: 72px;
 }
 
 footer {
   margin-top: 16px;
   text-align: center;
+}
+
+h2 {
+  font-size: 1rem;
 }

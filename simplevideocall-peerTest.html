@@ -71,7 +71,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-  <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+  <script src="adapter-latest.js"></script>
   <script src="remon.min.peerTest.js"></script>
   <script>
     let remonCall;
@@ -97,13 +97,13 @@
         local: '#localVideo'
       },
       dev: {
-        logLevel :'WARN'
+        logLevel :'VERBOSE'
       }
     }
 
     const listener = {
       onLog(message){
-        if(message.includes('<t>')){
+        if(message.includes('<t>') || message.includes('<w>')){
           stats.innerHTML = 
              new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ', ' + message + "\n" + stats.innerHTML;
         }else{
