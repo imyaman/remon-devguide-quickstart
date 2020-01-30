@@ -158,7 +158,7 @@
       },
 
       onError(errorCode, errorMessage) {
-        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onError" + ` : ${errorCode} ` + "\n" + stats.innerHTML;
+        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onError" + ` : ${errorCode} ${errorMessage} ` + "\n" + stats.innerHTML;
         console.log(`onError ${errorCode} ${errorMessage}`);
       }
 
