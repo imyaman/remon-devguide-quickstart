@@ -157,9 +157,9 @@
         console.log(`onDisconnectchannel : ${m.message}, ${m.closeType}`);
       },
 
-      onError(error) {
-        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onError" + ` : ${error}` + "\n" + stats.innerHTML;
-        console.log(`onError ${error}`);
+      onError(errorCode, errorMessage) {
+        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onError" + ` : ${errorCode} ${errorMessage}` + "\n" + stats.innerHTML;
+        console.log(`onError ${errorCode} $errorMessage`);
       }
 
     }
