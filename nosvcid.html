@@ -72,7 +72,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
   <script src="adapter-latest.js"></script>
-  <script src="remon.min.iceconnection.js"></script>
+  <script src="remon.min.peerTest.js"></script>
   <script>
     let remonCall;
     const log = document.getElementById("log");
@@ -89,8 +89,8 @@
     'remoteAudioRemovedSamplesForAcceleration'+'\n';
     const config = {
       credential: {
-        serviceId: 'c3941897-8a66-4d3d-bad3-faf70bd67696',
-        key: '0a1a858e6e6620e63a63bd78b01a1e238ed2ae6993dd3f2cd982f8c78413c585'
+        serviceId: '',
+        key: ''
       },
       view: {
         remote: '#remoteVideo',
@@ -157,9 +157,9 @@
         console.log(`onDisconnectchannel : ${m.message}, ${m.closeType}`);
       },
 
-      onError(errorCode, errorMessage) {
-        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onError" + ` : ${errorCode} ${errorMessage}` + "\n" + stats.innerHTML;
-        console.log(`onError ${errorCode} ${errorMessage}`);
+      onError(error) {
+        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onError" + ` : ${error}` + "\n" + stats.innerHTML;
+        console.log(`onError ${error}`);
       }
 
     }
@@ -194,21 +194,18 @@
     }
 
     function remonFree(){
-      if(remonCall.config.rtc.localStream){
-        let tracks = remonCall.config.rtc.localStream.getTracks();
-        tracks.forEach(function(track) {
-          track.stop();
-        });
-        if($('#localVideo')[0].srcObject){ $('#localVideo')[0].srcObject=undefined; }
-      }
+      let tracks = remonCall.config.rtc.localStream.getTracks();
+      tracks.forEach(function(track) {
+        track.stop();
+      });
+      if($('#localVideo')[0].srcObject){ $('#localVideo')[0].srcObject=undefined; }
 
-      if(remonCall.media.context.remoteStream){
-        tracks = remonCall.media.context.remoteStream.getTracks();
-        tracks.forEach(function(track) {
-          track.stop();
-        });
-        if($('#remoteVideo')[0].srcObject){ $('#remoteVideo')[0].srcObject=undefined; }
-      }
+      tracks = remonCall.media.context.remoteStream.getTracks();
+      tracks.forEach(function(track) {
+        track.stop();
+      });
+
+      if($('#remoteVideo')[0].srcObject){ $('#remoteVideo')[0].srcObject=undefined; }
 
       // remonCall=undefined; 자원을 해제하자면 해야하지만, 우리는 살펴봐야하므로.
     }
