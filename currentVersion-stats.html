@@ -72,7 +72,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
   <script src="adapter-latest.js"></script>
-  <script src="remon.min.peerTest.js"></script>
+  <script src="remon.min.currentVersion-stats.js"></script>
   <script>
     let remonCall;
     const log = document.getElementById("log");
@@ -89,21 +89,21 @@
     'remoteAudioRemovedSamplesForAcceleration'+'\n';
     const config = {
       credential: {
-        serviceId: '',
-        key: ''
+        serviceId: 'c3941897-8a66-4d3d-bad3-faf70bd67696',
+        key: '0a1a858e6e6620e63a63bd78b01a1e238ed2ae6993dd3f2cd982f8c78413c585'
       },
       view: {
         remote: '#remoteVideo',
         local: '#localVideo'
       },
       dev: {
-        logLevel :'WARN'
+        logLevel :'VERBOSE'
       }
     }
 
     const listener = {
       onLog(message){
-        if(message.includes('<t>')){
+        if(message.includes('<t>') || message.includes('<w>')){
           stats.innerHTML = 
              new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ', ' + message + "\n" + stats.innerHTML;
         }else{
@@ -148,6 +148,7 @@
 
       onClose() {
         stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onClose" + "\n" + stats.innerHTML;
+        $('#channelState').text("통화 종료");
         console.log(`onClose`);
       },
 
@@ -155,11 +156,14 @@
         $('#channelId').text("네트워크 연결 문제");
         stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onDisconnectChannel" + ` : ${m.message}, ${m.closeType}` + "\n" + stats.innerHTML;
         console.log(`onDisconnectchannel : ${m.message}, ${m.closeType}`);
+        remonFree();
       },
 
-      onError(error) {
-        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onError" + ` : ${error}` + "\n" + stats.innerHTML;
-        console.log(`onError ${error}`);
+      onError(errorCode, errorMessage) {
+        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onError" + ` ${errorCode} ${errorMessage}` + "\n" + stats.innerHTML;
+        console.log(`onError ${errorCode} ${errorMessage}`);
+        // alert(`Error: ${errorCode} ${errorMessage}`);
+        remonFree();
       }
 
     }
@@ -169,15 +173,14 @@
       // connectCall의 인자는 통화채널의 ID입니다. 실제 서비스에서는 동일한 통화채널의 ID가 아닌, 고유하고 예측이 어려운 ID를 사용해야합니다.
       stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "시작 버튼 클릭" + "\n" + stats.innerHTML;
       remonCall = new Remon({config: config, listener: listener});
-      remonCall.connectCall('peerTest');
+      remonCall.connectCall('peerTestMJ');
     });
 
     // "종료" 버튼을 클릭하면 통화채널에서 나갑니다.
     $('#stopCall').click(function() {
       stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "종료 버튼 클릭" + "\n" + stats.innerHTML;
       remonCall.close();
-      remonFree();
-      $('#channelState').text("통화 종료");
+      if($('#localVideo')[0].srcObject){ $('#localVideo')[0].srcObject=undefined; } // remon.close()가 알아서 하지 않으므로.
     });
 
     Date.prototype.yyyymmdd = function() {
