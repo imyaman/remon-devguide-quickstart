@@ -86,7 +86,8 @@
     'remoteAudioSilentConcealedSamples'+', '+
     'remoteAudioConcealmentEvents'+', '+
     'remoteAudioInsertedSamplesForDeceleration'+', '+
-    'remoteAudioRemovedSamplesForAcceleration'+'\n';
+    'remoteAudioRemovedSamplesForAcceleration'+', '+
+    'framesDecoded'+'\n';
     const config = {
       credential: {
         serviceId: 'c3941897-8a66-4d3d-bad3-faf70bd67696',
@@ -103,12 +104,7 @@
 
     const listener = {
       onLog(message){
-        if(message.includes('<t>') || message.includes('<w>')){
-          stats.innerHTML = 
-             new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ', ' + message + "\n" + stats.innerHTML;
-        }else{
           log.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + message + "\n" + log.innerHTML;
-        }
       },
 
       onStat(result){
@@ -127,6 +123,7 @@
              + ", "  + result['remoteAudioConcealmentEvents']
              + ", "  + result['remoteAudioInsertedSamplesForDeceleration']
              + ", "  + result['remoteAudioRemovedSamplesForAcceleration']
+             + ", "  + result['framesDecoded']
              + "\n"
              + stats.innerHTML;
              ;

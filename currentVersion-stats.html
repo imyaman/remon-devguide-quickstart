@@ -86,7 +86,8 @@
     'remoteAudioSilentConcealedSamples'+', '+
     'remoteAudioConcealmentEvents'+', '+
     'remoteAudioInsertedSamplesForDeceleration'+', '+
-    'remoteAudioRemovedSamplesForAcceleration'+'\n';
+    'remoteAudioRemovedSamplesForAcceleration'+', '+
+    'framesDecoded'+'\n';
     const config = {
       credential: {
         serviceId: 'c3941897-8a66-4d3d-bad3-faf70bd67696',
@@ -127,6 +128,7 @@
              + ", "  + result['remoteAudioConcealmentEvents']
              + ", "  + result['remoteAudioInsertedSamplesForDeceleration']
              + ", "  + result['remoteAudioRemovedSamplesForAcceleration']
+             + ", "  + result['framesDecoded']
              + "\n"
              + stats.innerHTML;
              ;
