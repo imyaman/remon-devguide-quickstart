@@ -210,7 +210,7 @@
       script = document.createElement('script');
       script.id = "sdkVersion";
       document.head.appendChild(script);
-        if(document.getElementById("versionSelector").selectedIndex > 15 ){
+        if(document.getElementById("versionSelector").selectedIndex > 16 ){
           script.src = document.getElementById("versionSelector").options[document.getElementById("versionSelector").selectedIndex].value
         }else{
           script.src = "https://cdn.jsdelivr.net/npm/@remotemonster/sdk@" 
