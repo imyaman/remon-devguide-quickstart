@@ -203,7 +203,7 @@
 
 
     function OnChangeVersion(){
-      const script = document.getElementById('sdkVersion');
+      let script = document.getElementById('sdkVersion');
       if(script){
         document.head.removeChild(document.getElementById('sdkVersion'));
       }
@@ -219,7 +219,7 @@
         }
     
 
-        console.log(remonSdkVersion.src)
+        console.log(script.src)
       }
     
     $('#startCall').click(function() {
