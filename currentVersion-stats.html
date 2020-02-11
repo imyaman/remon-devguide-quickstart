@@ -248,7 +248,7 @@ function drawRow(rowData) {
     var d = new Date(rowData.createdAt);
     var mytime = d.toLocaleString();
 
-    var row = $("<tr />");
+    // var row = $("<tr />");
     // $("#commentsTable").append(row); 
     console.log($("<td>" + rowData.get('content') + "</td>"));
     console.log($("<td>" + rowData.get('name') + "</td>"));
@@ -256,7 +256,7 @@ function drawRow(rowData) {
 }
 
 function drawCommentsError(data){
-    var row = $("<tr />");
+    // var row = $("<tr />");
     // $("#commentsTable").append(row); 
     console.log($("<td>-</td>"));
     console.log($("<td>-</td>"));
