@@ -215,6 +215,56 @@
       // remonCall=undefined; 자원을 해제하자면 해야하지만, 우리는 살펴봐야하므로.
     }
   </script>
+
+<script src="//www.parsecdn.com/js/parse-latest.min.js"></script>
+<script>
+var pgCount=5;
+var currentPage=0;
+
+$(document).ready(function() {
+    Parse.serverURL = 'https://imyaman-youre-space.back4app.io'
+    Parse.initialize('P71s2fWDkX3ADBHukxwq2lkKv0R0Cx7aJiMZDrQT', '4pQwMrW805OCap52UiXFPW6jQJp4O5W4i4arhCi1');
+    getCommentsList();
+});
+
+function getCommentsList(){
+    var query = new Parse.Query('Comment');
+    query.skip(pgCount*currentPage);
+    query.limit(pgCount);
+    query.descending("createdAt");
+    query.find({
+        success: drawCommentsTable,
+        error: drawCommentsError
+    });
+    currentPage++;
+}
+
+function drawCommentsTable(results){
+    $.each(results, function(index, value){
+        drawRow(value);
+    });
+}
+function drawRow(rowData) {
+    var d = new Date(rowData.createdAt);
+    var mytime = d.toLocaleString();
+
+    var row = $("<tr />");
+    // $("#commentsTable").append(row); 
+    console.log($("<td>" + rowData.get('content') + "</td>"));
+    console.log($("<td>" + rowData.get('name') + "</td>"));
+    console.log($("<td>" + mytime + "</td>"));
+}
+
+function drawCommentsError(data){
+    var row = $("<tr />");
+    // $("#commentsTable").append(row); 
+    console.log($("<td>-</td>"));
+    console.log($("<td>-</td>"));
+    console.log($("<td>-</td>"));
+}
+
+</script>
+
 </body>
 
 </html>
