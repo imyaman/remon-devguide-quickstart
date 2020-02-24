@@ -12,6 +12,16 @@
 <body>
   <main>
     <div id="player"></div>
+    <script src="https://firekast.io/sdk/js/latest/firekast.min.js"></script>
+    <script>
+      Firekast.API.init({
+        public_key: 'YOUR_APP_PUBLIC_KEY'
+      });
+      const player = new Firekast.Player({
+        parent_id:   '#player',
+        stream_id:   'STREAM_ID'
+      });
+    </script>
   </main>
   <footer>
     <p>리모트몬스터 제공</p>
@@ -68,27 +78,6 @@ function drawCommentsError(data){
 }
 
 </script>
-
-<script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
-<script>
-  var OneSignal = window.OneSignal || [];
-  OneSignal.push(function() {
-    OneSignal.init({
-      appId: "12213906-b46b-4eee-94f1-da52189efa0e",
-    });
-  });
-</script>
-
-  <script src="https://firekast.io/sdk/js/latest/firekast.min.js"></script>
-  <script>
-    Firekast.init({
-        public_key: '$2a$10$l3Zx7OmM5/xnQ9Qd3oswTeGeeuMuBGvLebzfYjgotDRd37.dmwNQC'
-    });
-    const player = new Firekast.Player({
-      parent_id:   '#player',
-      stream_id:   'STREAM_ID'
-    });
-  </script>
 
 </body>
 
