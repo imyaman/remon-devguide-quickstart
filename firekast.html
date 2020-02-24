@@ -11,7 +11,7 @@
 
 <body>
   <main>
-
+    <div id="player"></div>
   </main>
   <footer>
     <p>리모트몬스터 제공</p>
@@ -83,6 +83,10 @@ function drawCommentsError(data){
   <script>
     Firekast.init({
         public_key: '$2a$10$l3Zx7OmM5/xnQ9Qd3oswTeGeeuMuBGvLebzfYjgotDRd37.dmwNQC'
+    });
+    const player = new Firekast.Player({
+      parent_id:   '#player',
+      stream_id:   'STREAM_ID'
     });
   </script>
 
