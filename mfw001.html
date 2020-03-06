@@ -138,6 +138,8 @@
         $('#channelId').text(chid);
         $('#channelState').text("대기 중");
         console.log(`onConnect: ${chid}`);
+
+        callstats.addNewFabric(remonCall.context.peerConnection, remoteUserID, usage, conferenceID, fabricAttributes, pcCallback);
       },
 
       onComplete(chid) {
@@ -218,6 +220,21 @@ var userId = {};
 userId.userName = "Clark Kent";
 userId.aliasName = "superman";
 
+function pcCallback (err, msg) {
+  console.log("Monitoring status: "+ err + " msg: " + msg);
+};
+
+var usage = callstats.fabricUsage.multiplex;
+var fabricAttributes = {
+  remoteEndpointType:   callstats.endpointType.peer,
+  fabricTransmissionDirection:  callstats.transmissionDirection.sendrecv
+  };
+
+//remoteUserID is the recipient's userID
+//conferenceID is generated or provided by the origin server (webrtc service)
+var remoteUserID = 'remoteUserID';
+var conferenceID = 'conferenceID';
+
 var callstats = new callstats();
 
 callstats.initialize('282772212', 'CojOZJHLV62l:EllzOQj//na5/jtSm2pGMNRYGBVcbZ8o8EaduC0iLMk=', 'imyaman', csInitCallback, csStatsCallback, configParams);
@@ -269,25 +286,6 @@ function preCallTestResultsCallback(status, results) {
     console.log("Pre-call test could not be run");
   }
 }
-
-function pcCallback (err, msg) {
-  console.log("Monitoring status: "+ err + " msg: " + msg);
-};
-
-// pcObject is created, tell callstats about it
-// pick a fabricUsage enumeration, if pc is sending both media and data: use multiplex.
-
-var usage = callstats.fabricUsage.multiplex;
-var fabricAttributes = {
-  remoteEndpointType:   callstats.endpointType.peer,
-  fabricTransmissionDirection:  callstats.transmissionDirection.sendrecv
-  };
-
-//remoteUserID is the recipient's userID
-//conferenceID is generated or provided by the origin server (webrtc service)
-var remoteUserID = 'remoteUserID';
-var conferenceID = 'conferenceID';
-callstats.addNewFabric(remonCall.context.peerConnection, remoteUserID, usage, conferenceID, fabricAttributes, pcCallback);
 
 
   </script>
