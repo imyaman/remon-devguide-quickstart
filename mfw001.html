@@ -275,8 +275,64 @@ function drawCommentsError(data){
 
 <script src="https://api.callstats.io/static/callstats.min.js"></script>
 <script>
-// callstats.initialize('282772212', 'CojOZJHLV62l:EllzOQj//na5/jtSm2pGMNRYGBVcbZ8o8EaduC0iLMk=', 'imyaman', csInitCallback, csStatsCallback, configParams);
-callstats.initialize('282772212', 'CojOZJHLV62l:EllzOQj//na5/jtSm2pGMNRYGBVcbZ8o8EaduC0iLMk=', 'imyaman');
+var userId = {};
+userId.userName = "Clark Kent";
+userId.aliasName = "superman";
+
+var callstats = new callstats();
+
+callstats.initialize('282772212', 'CojOZJHLV62l:EllzOQj//na5/jtSm2pGMNRYGBVcbZ8o8EaduC0iLMk=', 'imyaman', csInitCallback, csStatsCallback, configParams);
+
+var configParams = {
+  disableBeforeUnloadHandler: true, // disables callstats.js's window.onbeforeunload parameter.
+  applicationVersion: "1.0.0", // Application version specified by the developer.
+  disablePrecalltest: true // disables the pre-call test, it is enabled by default.
+  siteID: "imyaman-youre-space", // The name/ID of the site/campus from where the call/pre-call test is made.
+};
+
+function csInitCallback(csError, csErrMsg) {
+  console.log("Status: errCode= " + csError + " errMsg= " + csErrMsg ); }
+}
+
+var reportType = {
+  inbound: 'inbound-rtp',
+  outbound: 'outbound-rtp'
+};
+
+var csStatsCallback = function (stats) {
+  var ssrc;
+  for (ssrc in stats.streams) {
+    console.log("SSRC is: ", ssrc);
+    var dataSsrc = stats.streams[ssrc];
+    console.log("SSRC Type ", dataSsrc.reportType);
+    if (dataSsrc.reportType === reportType.outbound) {
+      console.log("RTT is: ", dataSsrc.rtt);
+    } else if (dataSsrc.reportType === reportType.inbound) {
+      console.log("Inbound loss rate is: ", dataSsrc.fractionLoss);
+    }
+  }
+}
+
+callstats.on("preCallTestResults", csPreCallTestResultsCallback);
+
+function preCallTestResultsCallback(status, results) {
+
+//Check the status
+  if (status == callstats.callStatsAPIReturnStatus.success) {
+    //Results
+    var connectivity = results.mediaConnectivity;
+    var rtt = results.rtt;
+    var loss = results.fractionalLoss;
+    var throughput = results.throughput;
+
+  }
+  else {
+    console.log("Pre-call test could not be run");
+  }
+
+}
+
+
 </script>
 
 </body>
