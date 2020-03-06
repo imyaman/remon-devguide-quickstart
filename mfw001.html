@@ -216,9 +216,12 @@
       // remonCall=undefined; 자원을 해제하자면 해야하지만, 우리는 살펴봐야하므로.
     }
 
+var callstats = new callstats();
+
 var userId = {};
 userId.userName = "Clark Kent";
 userId.aliasName = "superman";
+
 
 function pcCallback (err, msg) {
   console.log("Monitoring status: "+ err + " msg: " + msg);
@@ -235,7 +238,6 @@ var fabricAttributes = {
 var remoteUserID = 'remoteUserID';
 var conferenceID = 'conferenceID';
 
-var callstats = new callstats();
 
 callstats.initialize('282772212', 'CojOZJHLV62l:EllzOQj//na5/jtSm2pGMNRYGBVcbZ8o8EaduC0iLMk=', 'imyaman', csInitCallback, csStatsCallback, configParams);
 
