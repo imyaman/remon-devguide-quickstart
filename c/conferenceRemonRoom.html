@@ -140,7 +140,10 @@
     var roomId
     if(query.length === 2) {
       roomId = query[1];
-      document.querySelect("#start").innerText='ROOM 생성'; }else{ document.querySelect("#start").innerText='ROOM 입장'; }
+      document.querySelector("#start").innerText='ROOM 생성'; 
+    }else{
+      document.querySelector("#start").innerText='ROOM 입장';
+    }
 
     // createRoom
     var RemonRoom = window.Remon.RemonRoom;
