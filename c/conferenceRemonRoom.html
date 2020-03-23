@@ -72,26 +72,20 @@
   </style>
   </head>
   <body>
-    <div >
+    <div>
       <div class="remon-header">
         <h1>Remon Room</h1>
       </div>
       <div id="videoRooms" class="remon-body">
-            <video
-              id="myVideo"
-              autoplay
-              muted
-              playsinline
-              class="video-style"
-            ></video>
+        <video id="myVideo" autoplay muted playsinline class="video-style"></video>
       </div>
       <div id="foot" style="padding-top:10px;">
-    <button id="start">start.....</button>
-
-          <label>Remote Monster</label>
-          <button onclick="closeRoom();">CloseRoom</button>
-        </div>
+  
+        <label>그룹통화 테스트</label>
+        <button id="start">ROOM 생성</button>
+        <button id="" onclick="closeRoom();">ROOM에서 나가기</button>
       </div>
+    </div>
     </div>
     <div class="remon-modal-base">
       <div class="remon-modal-box">
@@ -101,14 +95,14 @@
         <div class="remon-modal-row">
           <input placeholder="Enter RoomName" type="text" />
         </div>
-
+  
         <div class="remon-modal-row">
           <button class="confirm" value="his">Enter Room</button>
         </div>
       </div>
     </div>
   </body>
-</html>
+
 <script>
   var WaggleOrange = "#FF9606";
   var WaggleLightOrange = "#FFA222";
@@ -145,13 +139,13 @@
     var query = location.search.slice(1).split("=")
     var roomId
     if(query.length === 2) {
-      roomId = query[1]
-    }
+      roomId = query[1];
+      document.querySelect("#start").innerText='ROOM 생성'; }else{ document.querySelect("#start").innerText='ROOM 입장'; }
 
     // createRoom
     var RemonRoom = window.Remon.RemonRoom;
     var remonRoom = new RemonRoom({
-      // url: "wss://13.124.129.54:8080/msgServer",
+      // url: "ws://13.124.129.54:8080/msgServer",
       url: "wss://dev-jaguar.remotemonster.com/msg-server",
       config: {
         credential: {
@@ -204,7 +198,7 @@
       console.log("RemonRoomName ", remonRoom.roomId)
 
       let a = document.createElement('a')
-      a.textContent="enter new page"
+      a.textContent="이 ROOM의 주소 : " + "conferenceRemonRoom.html?roomId=" + remonRoom.roomId;
       a.setAttribute("href","conferenceRemonRoom.html?roomId="+remonRoom.roomId)
       a.setAttribute("target","_blank")
       document.getElementById("foot").appendChild(a)
@@ -267,3 +261,5 @@
     
   })
 </script>
+
+</html>
