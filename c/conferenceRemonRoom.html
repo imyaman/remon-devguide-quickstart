@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Remon Room Conference</title>
+    <meta name="viewport" content="width=device-width" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+      integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+      crossorigin="anonymous"
+    />
+    <script src="./remon.min.js"></script>
+  </head>
+  <body>
+    <div >
+      <div class="remon-header">
+        <h1>Remon Room</h1>
+      </div>
+      <div id="videoRooms" class="remon-body">
+            <video
+              id="myVideo"
+              autoplay
+              muted
+              playsinline
+              class="video-style"
+            ></video>
+      </div>
+      <div id="foot" style="padding-top:10px;">
+    <button id="start">start.....</button>
+
+          <label>Remote Monster</label>
+          <button onclick="closeRoom();">CloseRoom</button>
+        </div>
+      </div>
+    </div>
+    <div class="remon-modal-base">
+      <div class="remon-modal-box">
+        <div class="remon-modal-row">
+          <label>Start Conference!</label>
+        </div>
+        <div class="remon-modal-row">
+          <input placeholder="Enter RoomName" type="text" />
+        </div>
+
+        <div class="remon-modal-row">
+          <button class="confirm" value="his">Enter Room</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+<style>
+  .remon-header{
+    padding: 0;
+    background-color: #FF9606;
+    color: white;
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+  }
+  .remon-body{
+    padding-top: 56px;
+    background-color: #111111;
+    display: flex;
+    min-height: 100vh;
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+  .remon-video-room{
+  }
+  .remon-footer{
+
+  }
+  .remon-modal-base {
+    background-color: white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .remon-modal-box {
+    background: white;
+    display: flex;
+    justify-content: center;
+    width: 30%;
+    max-width: 300px;
+    flex-direction: column;
+    min-width: 250px;
+    align-items: center;
+    padding: 1em;
+    border: 1px solid black;
+  }
+  .remon-modal-row {
+    margin: 0.2em;
+    /*border: 1px solid black;*/
+  }
+  .video-style{
+    width: 100%;
+    z-index:1; 
+    object-fit:cover;
+    background: rgba(0, 0, 0, 0.5);
+  }
+</style>
+<script>
+  var WaggleOrange = "#FF9606";
+  var WaggleLightOrange = "#FFA222";
+  var WaggleLightGreen = "#22FF8E";
+  var WaggleOrangeDark = "#CC7804";
+  function createRemoteVideo(session){
+    var sessionId = session.sessionId
+    if(session.sessionType === "PUBLISH") return 
+    var viewId = `view_${sessionId}`
+    var video = document.getElementById(`view_${sessionId}`);
+
+    if(!video){
+      video = getVideoTag(viewId)
+      document.getElementById("videoRooms").appendChild(video)
+    } 
+
+    if (session.isPublished && !session.currRemon) {
+      session.view({
+        credential: {
+          key: "1234567890",
+          serviceId: "SERVICEID1"
+        },
+        view: {
+          remote: "#"+viewId
+          // local: "#video2"
+        }
+      });
+    }
+  }
+  
+  async function init() {
+
+    //
+    var query = location.search.slice(1).split("=")
+    var roomId
+    if(query.length === 2) {
+      roomId = query[1]
+    }
+
+    // createRoom
+    var RemonRoom = window.Remon.RemonRoom;
+    var remonRoom = new RemonRoom({
+      url: "ws://13.124.129.54:8080/msgServer",
+      config: {
+        credential: {
+          serviceId: "sangyong.gwak@devopskorea.org",
+          key: "4caa69d31d429f72fcb411ee9ce313365439639365c4c981"
+        }
+      }
+    });
+    window.remonRoom = remonRoom
+    remonRoom.on("onMessage", data => {
+      console.log("onMessage Event ", data);
+    });
+    remonRoom.on("onSessionCreated", session => {
+      session.on("onSessionUpdated", updatedSession => {
+        createRemoteVideo(updatedSession)
+        if(updatedSession.isOnline === false){
+          var sessionId = session.sessionId;
+          var viewId = `view_${sessionId}`
+          console.log(`${session.sessionId} : onSessionDeleted`);
+          document.getElementById(viewId).style.display = "none"
+          calculateVideoWidth()
+        }
+      });
+      session.on("onSessionDeleted", session => {
+        var sessionId = session.sessionId;
+        var viewId = `view_${sessionId}`
+        console.log(`${session.sessionId} : onSessionDeleted`);
+        document.getElementById(viewId).remove()
+        calculateVideoWidth()
+      });
+      createRemoteVideo(session)
+      calculateVideoWidth()
+    });
+    await remonRoom.connect();
+    if(roomId){
+      await remonRoom.joinRoom(roomId,{ note: "participant" });
+      const rSession = await remonRoom.conference({
+        view: {
+          local: "#myVideo"
+        }
+      });
+    }else{
+      await remonRoom.createRoom(
+        {
+          roomName: "Hello, Conference",
+          roomType: "CONFERENCE"
+        },
+        { note: "master" }
+      );
+      console.log("RemonRoomName ", remonRoom.roomId)
+
+      let a = document.createElement('a')
+      a.textContent="enter new page"
+      a.setAttribute("href","conferenceRemonRoom.html?roomId="+remonRoom.roomId)
+      a.setAttribute("target","_blank")
+      document.getElementById("foot").appendChild(a)
+      
+      const rSession = await remonRoom.conference({
+        view: {
+          local: "#myVideo"
+        }
+      });
+      // await remonRoom.updateRoom({roomName:"hello"})
+      
+    }
+  }
+  function getVideoTag(id){
+    var video = document.createElement('video');
+
+    var attrs = {id,
+                  autoplay:true,
+                  playsinline:true,
+                  class:"video-style",
+                  // style:"max-height:500px; max-width:500px; z-index:1; background: rgba(0, 0, 0, 0.5);"
+        };
+    Object.entries(attrs).forEach(([k,v])=>{
+      video.setAttribute(k,v)
+    })
+    return video;
+  }
+  function closeRoom(){
+    remonRoom.close()
+  }
+  function calculateVideoWidth(){
+    var width = document.body.clientWidth;
+    var height = window.innerHeight//ocument.body.clientHeight;
+    var targetVideoTagArr = Array.from(document.getElementsByTagName('video')).filter(vTag => vTag.style.display !== "none")
+    var vCnt = targetVideoTagArr.length
+    var newWidth = width/parseInt(vCnt%4);
+    var newHeight = height/2;
+    targetVideoTagArr.forEach(vTag=>{
+      vTag.style.width = newWidth+"px";
+      vTag.style.height = newHeight+"px";
+    })
+
+    console.log()
+  }
+  document.getElementById("start").addEventListener("click",()=>{
+    init();
+  })
+  let timeout
+  window.addEventListener("resize", function(event) {
+    console.log(document.body.clientWidth + ' wide by ' + document.body.clientHeight+' high');
+    if(!timeout){
+      timeout = setTimeout(()=>{
+        calculateVideoWidth()
+        clearTimeout(timeout)
+        timeout = null
+      }, 1000)
+    }
+    
+  })
+</script>
