@@ -12,6 +12,63 @@
       crossorigin="anonymous"
     />
     <script src="./remon.min.js"></script>
+  <style>
+    .remon-header{
+      padding: 0;
+      background-color: #FF9606;
+      color: white;
+      position: fixed;
+      z-index: 1;
+      width: 100%;
+    }
+    .remon-body{
+      padding-top: 56px;
+      background-color: #111111;
+      display: flex;
+      min-height: 100vh;
+      flex-wrap: wrap;
+      align-items: stretch;
+    }
+    .remon-video-room{
+    }
+    .remon-footer{
+  
+    }
+    .remon-modal-base {
+      background-color: white;
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .remon-modal-box {
+      background: white;
+      display: flex;
+      justify-content: center;
+      width: 30%;
+      max-width: 300px;
+      flex-direction: column;
+      min-width: 250px;
+      align-items: center;
+      padding: 1em;
+      border: 1px solid black;
+    }
+    .remon-modal-row {
+      margin: 0.2em;
+      /*border: 1px solid black;*/
+    }
+    .video-style{
+      width: 100%;
+      z-index:1; 
+      object-fit:cover;
+      background: rgba(0, 0, 0, 0.5);
+    }
+  </style>
   </head>
   <body>
     <div >
@@ -51,63 +108,6 @@
     </div>
   </body>
 </html>
-<style>
-  .remon-header{
-    padding: 0;
-    background-color: #FF9606;
-    color: white;
-    position: fixed;
-    z-index: 1;
-    width: 100%;
-  }
-  .remon-body{
-    padding-top: 56px;
-    background-color: #111111;
-    display: flex;
-    min-height: 100vh;
-    flex-wrap: wrap;
-    align-items: stretch;
-  }
-  .remon-video-room{
-  }
-  .remon-footer{
-
-  }
-  .remon-modal-base {
-    background-color: white;
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  .remon-modal-box {
-    background: white;
-    display: flex;
-    justify-content: center;
-    width: 30%;
-    max-width: 300px;
-    flex-direction: column;
-    min-width: 250px;
-    align-items: center;
-    padding: 1em;
-    border: 1px solid black;
-  }
-  .remon-modal-row {
-    margin: 0.2em;
-    /*border: 1px solid black;*/
-  }
-  .video-style{
-    width: 100%;
-    z-index:1; 
-    object-fit:cover;
-    background: rgba(0, 0, 0, 0.5);
-  }
-</style>
 <script>
   var WaggleOrange = "#FF9606";
   var WaggleLightOrange = "#FFA222";
@@ -241,6 +241,8 @@
     var vCnt = targetVideoTagArr.length
     var newWidth = width/parseInt(vCnt%4);
     var newHeight = height/2;
+    newWidth = 160;
+    newHeight = 120;
     targetVideoTagArr.forEach(vTag=>{
       vTag.style.width = newWidth+"px";
       vTag.style.height = newHeight+"px";
