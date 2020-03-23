@@ -81,9 +81,12 @@
       </div>
       <div id="foot" style="padding-top:10px;">
   
-        <label>그룹통화 테스트</label>
+        <label>그룹통화 테스트</label><br />
+        <span id="roomIdArea"></span>
         <button id="start">ROOM 생성</button>
-        <button id="" onclick="closeRoom();">ROOM에서 나가기</button>
+        <button id="" onclick="closeRoom();" disabled>ROOM에서 나가기</button>
+        <span id="roomUrlArea"></span>
+        <span id="logArea"></span>
       </div>
     </div>
     </div>
@@ -108,6 +111,8 @@
   var WaggleLightOrange = "#FFA222";
   var WaggleLightGreen = "#22FF8E";
   var WaggleOrangeDark = "#CC7804";
+
+  var spanLog = document.querySelector('#logArea');
   function createRemoteVideo(session){
     var sessionId = session.sessionId
     if(session.sessionType === "PUBLISH") return 
@@ -140,9 +145,10 @@
     var roomId
     if(query.length === 2) {
       roomId = query[1];
-      document.querySelector("#start").innerText='ROOM 생성'; 
+      document.querySelector('#roomIdArea').innerText='ROOM의 ID : ' + roomId;
+      document.querySelector('#start').innerText='ROOM 입장';
     }else{
-      document.querySelector("#start").innerText='ROOM 입장';
+      document.querySelector('#start').innerText='ROOM 생성'; 
     }
 
     // createRoom
