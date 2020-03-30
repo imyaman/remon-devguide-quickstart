@@ -184,11 +184,11 @@
               },
               media: {
                 video: {
-                  width: "320",
-                  height: "240",
-                  codec: "H264",
+                  width: { min: 320, max: 640 },
+                  height: { min: 240, max: 480 },
+                  frameRate: { min: 8, max: 30 },
                   maxBandwidth: 1800,
-                  frameRate: { min: 8, max: 30 }
+                  codec: 'H264'
                 },
                 audio: true
               }
