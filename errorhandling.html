@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>리모트몬스터 단순 통화 앱</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <main>
+    <div class="container">
+      <div class="row">
+        <div id="you" class="col-12 col-sm-6 col-md-6">
+          <h2>상대방</h2>
+          <video id="remoteVideo" class="remoteVideo" autoplay></video>
+        </div>
+        <div id="me" class="col-12 col-sm-6 col-md-6">
+          <h2>나</h2>
+          <video id="localVideo" class="localVideo" autoplay></video>
+        </div>
+      </div>
+      <div class="row">
+        <div id="controlLeft" class="col-6 col-sm-6 col-md-6">
+          <button id="startCall">시작</button>
+        </div>
+        <div id="controlRight" class="col-6 col-sm-6 col-md-6">
+          <button id="stopCall">종료</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12 col-sm-12 col-md-12">
+          <div id="channelId"></div>
+          <div id="channelState"></div>
+        </div>
+      </div>
+
+      <div >
+        <div class="card shadow mb-4">
+          <!-- Card Header - Dropdown -->
+          <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+              <h6 class="m-0 font-weight-bold text-primary">Stats</h6>
+          </div>
+          <!-- Card Body -->
+          <div class="card-body">
+              <textarea id="stats" class="text-left" style="width: 100%; height: 4rem;">
+              </textarea>
+          </div>
+        </div>
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Log</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <textarea id="log" class="text-left" style="width: 100%; height: 4rem;">
+                </textarea>
+            </div>
+        </div>
+      </div>
+
+    </div>
+    </div>
+  </main>
+
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Launch demo modal
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+$('#exampleModal').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) // Button that triggered the modal
+  var recipient = button.data('whatever') // Extract info from data-* attributes
+  // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+  // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+  var modal = $(this)
+  modal.find('.modal-title').text('New message to ' + recipient)
+  modal.find('.modal-body input').val(recipient)
+})
+  </script>
+
+  <footer>
+    <p>리모트몬스터 제공</p>
+  </footer>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <script src="adapter-latest.js"></script>
+  <script src="remon.min.currentVersion.js"></script>
+  <script>
+    let remonCall;
+    const log = document.getElementById("log");
+    const stats = document.getElementById("stats");
+    log.innerHTML = "";
+    stats.innerHTML = '현재시각'+', '+'수신-오디오패킷량'+', '+ '수신-비디오패킷량'+', '+ '송신-오디오패킷량'+', ' + '송신-비디오패킷량'+', '+ '오디오RTT'+', ' + '비디오RTT'+', '
+    + '비디오프레임레이트'+', '+ 
+    'remoteAudioTotalSamplesReceived'+', '+ 
+    'remoteAudioTotalSamplesDuration'+', '+
+    'remoteAudioConcealedSamples'+', ' +
+    'remoteAudioSilentConcealedSamples'+', '+
+    'remoteAudioConcealmentEvents'+', '+
+    'remoteAudioInsertedSamplesForDeceleration'+', '+
+    'remoteAudioRemovedSamplesForAcceleration'+', '+
+    'framesDecoded'+'\n';
+    const config = {
+      credential: {
+        serviceId: 'c3941897-8a66-4d3d-bad3-faf70bd67696',
+        key: '0a1a858e6e6620e63a63bd78b01a1e238ed2ae6993dd3f2cd982f8c78413c585'
+      },
+      view: {
+        remote: '#remoteVideo',
+        local: '#localVideo'
+      },
+      dev: {
+        logLevel :'VERBOSE'
+      }
+    }
+
+    const listener = {
+      onLog(message){
+          log.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + message + "\n" + log.innerHTML;
+      },
+
+      onStat(result){
+        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss()
+             + ", "  + result['nowRemoteAPReceived']
+             + ", "  + result['nowRemoteVPReceived']
+             + ", "  + result['nowLocalAPSent']
+             + ", "  + result['nowLocalVPSent']
+             + ", "  + result['audioRtt']
+             + ", "  + result['videoRtt']
+             + ", "  + result['nowRemoteFrameRate']
+             + ", "  + result['remoteAudioTotalSamplesReceived']
+             + ", "  + result['remoteAudioTotalSamplesDuration']
+             + ", "  + result['remoteAudioConcealedSamples']
+             + ", "  + result['remoteAudioSilentConcealedSamples']
+             + ", "  + result['remoteAudioConcealmentEvents']
+             + ", "  + result['remoteAudioInsertedSamplesForDeceleration']
+             + ", "  + result['remoteAudioRemovedSamplesForAcceleration']
+             + ", "  + result['framesDecoded']
+             + "\n"
+             + stats.innerHTML;
+             ;
+      },
+
+      onConnect(chid) {
+        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onConnect" + "\n" + stats.innerHTML;
+        $('#channelId').text(chid);
+        $('#channelState').text("대기 중");
+        console.log(`onConnect: ${chid}`);
+      },
+
+      onComplete(chid) {
+        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onComplete" + "\n" + stats.innerHTML;
+        $('#channelId').text(chid);
+        $('#channelState').text("통화 중");
+        console.log(`onComplete`);
+      },
+
+      onClose() {
+        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onClose" + "\n" + stats.innerHTML;
+        $('#channelState').text("통화 종료");
+        console.log(`onClose`);
+      },
+
+      onDisconnectChannel(m) {
+        $('#channelId').text("네트워크 연결 문제");
+        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onDisconnectChannel" + ` : ${m.message}, ${m.closeType}` + "\n" + stats.innerHTML;
+        console.log(`onDisconnectchannel : ${m.message}, ${m.closeType}`);
+        remonFree();
+      },
+
+      onError(errorCode, errorMessage) {
+        stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "콜백 onError" + ` ${errorCode} ${errorMessage}` + "\n" + stats.innerHTML;
+        console.log(`onError ${errorCode} ${errorMessage}`);
+        // alert(`Error: ${errorCode} ${errorMessage}`);
+        remonFree();
+      }
+
+    }
+
+    
+    $('#startCall').click(function() {
+      // connectCall의 인자는 통화채널의 ID입니다. 실제 서비스에서는 동일한 통화채널의 ID가 아닌, 고유하고 예측이 어려운 ID를 사용해야합니다.
+      stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "시작 버튼 클릭" + "\n" + stats.innerHTML;
+      remonCall = new Remon({config: config, listener: listener});
+      remonCall.connectCall('peerTestMJ');
+    });
+
+    // "종료" 버튼을 클릭하면 통화채널에서 나갑니다.
+    $('#stopCall').click(function() {
+      stats.innerHTML = new Date().yyyymmdd() + ' T ' + new Date().hhmmss() + ", " + "종료 버튼 클릭" + "\n" + stats.innerHTML;
+      remonCall.close();
+      if($('#localVideo')[0].srcObject){ $('#localVideo')[0].srcObject=undefined; } // remon.close()가 알아서 하지 않으므로.
+    });
+
+    Date.prototype.yyyymmdd = function() {
+      var yyyy = this.getFullYear().toString();
+      var mm = (this.getMonth() + 1).toString();
+      var dd = this.getDate().toString();
+      return  yyyy + "-" + (mm[1] ? mm : "0" + mm[0]) + "-" + (dd[1] ? dd : "0" + dd[0]);
+    }
+    Date.prototype.hhmmss = function() {
+      var hh = this.getHours().toString();
+      var mm = this.getMinutes().toString();
+      var ss = this.getSeconds().toString();
+      return (hh[1] ? hh : "0" + hh[0]) + ":" + (mm[1] ? mm : "0" + mm[0]) + ":" + (ss[1] ? ss : "0" + ss[0]);
+    }
+
+    function remonFree(){
+      let tracks = remonCall.config.rtc.localStream.getTracks();
+      tracks.forEach(function(track) {
+        track.stop();
+      });
+      if($('#localVideo')[0].srcObject){ $('#localVideo')[0].srcObject=undefined; }
+
+      tracks = remonCall.media.context.remoteStream.getTracks();
+      tracks.forEach(function(track) {
+        track.stop();
+      });
+
+      if($('#remoteVideo')[0].srcObject){ $('#remoteVideo')[0].srcObject=undefined; }
+
+      // remonCall=undefined; 자원을 해제하자면 해야하지만, 우리는 살펴봐야하므로.
+    }
+  </script>
+</body>
+
+</html>
