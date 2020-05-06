@@ -71,11 +71,6 @@ const config = {
     serviceId: 'sangyong.gwak@devopskorea.org',
     key: '4caa69d31d429f72fcb411ee9ce313365439639365c4c981'
   },
-  media : {
-    video : {
-      deviceId : ''
-    }
-  },
   view: {
     local: '#localVideo'
   }
@@ -84,6 +79,19 @@ const config = {
 const listener = {
   onCreate(chid) { 
     console.log(`EVENT FIRED: onCreate: ${chid}`); $('#mystart').prop( "disabled", true ); $('#mystop').prop( "disabled", false );
+
+    let videoDeviceLabel = remon.config.rtc.localStream.getVideoTracks()[0].label;
+    navigator.mediaDevices.enumerateDevices().then(function(devices) {
+     devices.forEach(function(device) {
+       if(device.label === videoDeviceLabel) {
+         console.log(device);
+          // Labels for both cameras are blank:
+          // MediaDeviceInfo { deviceId: "123ABC", groupId: "", kind: "videoinput", label: "" }
+         videoDevice = device.deviceId;
+        }
+      });
+    });
+
   },
   onJoin(chid) { 
     console.log(`EVENT FIRED: onJoin: ${chid}`); 
@@ -115,18 +123,6 @@ $('#mystop').click(function(){
 
 $('#mystart').click(function(){
   // createCast의 인자는 방송채널의 ID입니다. 실제 서비스에서는 동일한 방송채널의 ID가 아닌, 고유하고 예측이 어려운 ID를 사용해야합니다.
-  navigator.mediaDevices.enumerateDevices().then(function(devices) {
-   devices.forEach(function(device) {
-     if(device.kind === 'videoinput') {
-       console.log(device);
-        // Labels for both cameras are blank:
-        // MediaDeviceInfo { deviceId: "123ABC", groupId: "", kind: "videoinput", label: "" }
-       videoDevice = device.deviceId;
-       config.media.video.deviceId = videoDevice;
-      }
-    });
-  });
-
   remon = new Remon({ config, listener });
   remon.createCast("my-first-livestreaming");
 });
