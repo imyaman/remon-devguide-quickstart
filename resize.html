@@ -124,7 +124,7 @@ var apply2 = (w, h, f)  => {
   .then(stream => remon.context.videoTransceiver.sender.replaceTrack(stream.getVideoTracks()[0]))
   .then(() => log("Applied "+ w +" x "+ h + " f " + f))
     .catch(failed);
-  oldTrack.stop();
+  // oldTrack.stop();
   }
 
 var repeat = (ms, func) => new Promise(r => setInterval(func, ms));
