@@ -41,8 +41,6 @@
       <button id="b14" onclick="apply(1280,720, 24)">720p, 24fps</button>
       <button id="b15" onclick="apply(1920,1080, 30)">1280p, 30fps</button>
       <br>
-      <div id="logArea"></div>
-      <div id="currentSize"><p>0 x 0 x 0.0</p></div>
     </div>
     <div>
       방식2 (RTCRtpSender의 track 변경)<br>
@@ -52,7 +50,11 @@
       <button id="b24" onclick="apply2(1280,720, 24)">720p, 24fps</button>
       <button id="b25" onclick="apply2(1920,1080, 30)">1280p, 30fps</button>
     </div>
-    <button id="b7" onclick="off()">Cam Off</button>
+    <div>
+      <button id="b7" onclick="off()">Cam Off</button><br>
+      <div id="logArea"></div>
+      <div id="currentSize"><p>0 x 0 x 0.0</p></div>
+    </div>
   </div>
   <div id="wingright"></div>
 
