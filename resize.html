@@ -132,6 +132,7 @@ var apply2 = (w, h, f)  => {
 
     remon.context.videoTransceiver.sender.replaceTrack(newVideoTrack);
 
+    /* 중요: 명시적으로 끄지 않으면, close를 호출해도 여전히 카메라가 켜져 있다 */
     oldVideoTrack.stop();
   })
   .then(() => log("Applied "+ w +" x "+ h + " f " + f))
