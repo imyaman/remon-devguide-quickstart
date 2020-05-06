@@ -41,7 +41,7 @@
       <button id="b14" onclick="apply(1280,720, 24)">720p, 24fps</button>
       <button id="b15" onclick="apply(1920,1080, 30)">1280p, 30fps</button>
       <br>
-      <div id="div"></div>
+      <div id="logArea"></div>
       <div id="currentSize"><p>0 x 0 x 0.0</p></div>
     </div>
     <div>
@@ -125,8 +125,8 @@ var apply2 = (w, h, f)  => {
   }
 
 var repeat = (ms, func) => new Promise(r => setInterval(func, ms));
-var log = msg => div.innerHTML += "<p>" + msg + "</p>";
-var update = msg => div2.innerHTML = "<p>" + msg + "</p>";
+var log = msg => logArea.innerHTML += "<p>" + msg + "</p>";
+var update = msg => currentSize.innerHTML = "<p>" + msg + "</p>";
 var failed = e => log(e +" constraint="+ e.constraint+", line "+ e.lineNumber);
 
   </script>
