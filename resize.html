@@ -64,6 +64,7 @@
   <script>
 let remon;
 let oldVideoTrack, newVideoTrack;
+let videoDevice;
 
 const config = {
   credential: {
@@ -115,7 +116,8 @@ $('#mystart').click(function(){
        console.log(device);
         // Labels for both cameras are blank:
         // MediaDeviceInfo { deviceId: "123ABC", groupId: "", kind: "videoinput", label: "" }
-       config.media.video.deviceId = device.deviceId;
+       videoDevice = device.deviceId;
+       config.media.video.deviceId = videoDevice;
       }
     });
   });
@@ -130,7 +132,7 @@ var apply = (w, h, f)  => remon.config.rtc.localStream.getTracks()[1]
     .catch(failed);
 
 var apply2 = (w, h, f)  => {
-  navigator.mediaDevices.getUserMedia({ video: { width: w, height: h, frameRate: { ideal: f } }, audio: false })
+  navigator.mediaDevices.getUserMedia({ video: { deviceId: videoDevice, width: w, height: h, frameRate: { ideal: f } }, audio: false })
   .then(stream => {
     newVideoTrack = stream.getVideoTracks()[0];
     oldVideoTrack = remon.config.rtc.localStream.getVideoTracks()[0];
