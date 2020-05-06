@@ -34,16 +34,25 @@
       <br>
     </div>
     <div>
-      <button id="b1" onclick="apply(160,120, 1)">160p, 1fps</button>
-      <button id="b2" onclick="apply(320,240, 8)">320p, 8fps</button>
-      <button id="b3" onclick="apply(640,480, 16)">640p, 16fps</button>
-      <button id="b4" onclick="apply(1280,720, 24)">720p, 24fps</button>
-      <button id="b5" onclick="apply(1920,1080, 30)">1280p, 30fps</button>
-      <button id="b7" onclick="off()">Cam Off</button>
+      방식1 (Stream의 constraint 변경)
+      <button id="b11" onclick="apply(160,120, 1)">160p, 1fps</button>
+      <button id="b12" onclick="apply(320,240, 8)">320p, 8fps</button>
+      <button id="b13" onclick="apply(640,480, 16)">640p, 16fps</button>
+      <button id="b14" onclick="apply(1280,720, 24)">720p, 24fps</button>
+      <button id="b15" onclick="apply(1920,1080, 30)">1280p, 30fps</button>
       <br>
       <div id="div"></div>
       <div id="currentSize"><p>0 x 0 x 0.0</p></div>
     </div>
+    <div>
+      방식2 (RTPSenter의 track 변경)
+      <button id="b21" onclick="apply2(160,120, 1)">160p, 1fps</button>
+      <button id="b22" onclick="apply2(320,240, 8)">320p, 8fps</button>
+      <button id="b23" onclick="apply2(640,480, 16)">640p, 16fps</button>
+      <button id="b24" onclick="apply2(1280,720, 24)">720p, 24fps</button>
+      <button id="b25" onclick="apply2(1920,1080, 30)">1280p, 30fps</button>
+    </div>
+    <button id="b7" onclick="off()">Cam Off</button>
   </div>
   <div id="wingright"></div>
 
@@ -105,6 +114,15 @@ var apply = (w, h, f)  => remon.config.rtc.localStream.getTracks()[1]
   .applyConstraints({ width: w, height: h, frameRate: { ideal: f } })
   .then(() => log("Applied "+ w +" x "+ h + " f " + f))
     .catch(failed);
+
+var apply2 = (w, h, f)  => {
+  let oldTrack = remon.config.rtc.localStream.getTracks()[1];
+  navigator.mediaDevices.getUserMedia({ video: { width: w, height: h, frameRate: { ideal: f }, audio: false })
+  .then(stream => remon.context.videoTransceiver.sender.replaceTrack(stream.getVideoTracks()[0]))
+  .then(() => log("Applied "+ w +" x "+ h + " f " + f))
+    .catch(failed);
+  oldTrack.stop();
+  }
 
 var repeat = (ms, func) => new Promise(r => setInterval(func, ms));
 var log = msg => div.innerHTML += "<p>" + msg + "</p>";
