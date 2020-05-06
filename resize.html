@@ -118,16 +118,35 @@ var apply = (w, h, f)  => remon.config.rtc.localStream.getTracks()[1]
   .then(() => log("Applied "+ w +" x "+ h + " f " + f))
     .catch(failed);
 
+/* video 트랙만 교체하는 방법을 쓰려고 했더니 local view를 수정할 방법이 없더라. video와 audio 함께 교체해야겠다.
 var apply2 = (w, h, f)  => {
   oldVideoTrack = remon.config.rtc.localStream.getTracks()[1];
-  navigator.mediaDevices.getUserMedia({ video: { width: w, height: h, frameRate: { ideal: f } }, audio: false })
+  navigator.mediaDevices.getUserMedia({ video: { width: w, height: h, frameRate: { ideal: f } }, audio: true })
   .then(stream => {
     newVideoTrack = stream.getVideoTracks()[0];
     remon.context.videoTransceiver.sender.replaceTrack(stream.getVideoTracks()[0]);
   })
   .then(() => log("Applied "+ w +" x "+ h + " f " + f))
     .catch(failed);
-  // oldTrack.stop();
+  / / oldTrack.stop();
+  }
+*/
+
+var apply2 = (w, h, f)  => {
+  navigator.mediaDevices.getUserMedia({ video: { width: w, height: h, frameRate: { ideal: f } }, audio: true })
+  .then(stream => {
+    newVideoTrack = stream.getVideoTracks()[0];
+    oldVideoTrack = remon.config.rtc.localStream.getTracks()[1];
+
+    document.querySelector(remon.config.view.local).srcObject.addTrack(newVideoTrack);
+    document.querySelector(remon.config.view.local).srcObject.removeTrack(oldVideoTrack);
+
+    remon.context.videoTransceiver.sender.replaceTrack(stream.getVideoTracks()[0]);
+
+    oldVideoTrack.stop();
+  })
+  .then(() => log("Applied "+ w +" x "+ h + " f " + f))
+    .catch(failed);
   }
 
 var repeat = (ms, func) => new Promise(r => setInterval(func, ms));
