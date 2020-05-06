@@ -119,7 +119,7 @@ var apply = (w, h, f)  => remon.config.rtc.localStream.getTracks()[1]
 
 var apply2 = (w, h, f)  => {
   let oldTrack = remon.config.rtc.localStream.getTracks()[1];
-  navigator.mediaDevices.getUserMedia({ video: { width: w, height: h, frameRate: { ideal: f }, audio: false })
+  navigator.mediaDevices.getUserMedia({ video: { width: w, height: h, frameRate: { ideal: f } }, audio: false })
   .then(stream => remon.context.videoTransceiver.sender.replaceTrack(stream.getVideoTracks()[0]))
   .then(() => log("Applied "+ w +" x "+ h + " f " + f))
     .catch(failed);
