@@ -137,6 +137,7 @@ var apply2 = (w, h, f)  => {
   .then(stream => {
     newVideoTrack = stream.getVideoTracks()[0];
     oldVideoTrack = remon.config.rtc.localStream.getTracks()[1];
+    log('Video Track Change: ' + oldVideoTrack + ' -> ' + newVideoTrack );
 
     /* video 태그에 연결된 MediaStream 객체에게 타입이 video인 트랙이 2개 있을 때, 
        1개가 사라지면 남아있는 트랙이 자동으로 표시됨  */
