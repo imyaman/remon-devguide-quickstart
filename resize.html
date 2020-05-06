@@ -50,43 +50,66 @@
   <script src="adapter-latest.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
   <script>
-  let remon;
+let remon;
+let track;
 
-  const config = {
-    credential: {
-      serviceId: 'sangyong.gwak@devopskorea.org',
-      key: '4caa69d31d429f72fcb411ee9ce313365439639365c4c981'
-    },
-    view: {
-      local: '#localVideo'
-    }
-  };
+const config = {
+  credential: {
+    serviceId: 'sangyong.gwak@devopskorea.org',
+    key: '4caa69d31d429f72fcb411ee9ce313365439639365c4c981'
+  },
+  view: {
+    local: '#localVideo'
+  }
+};
 
-  const listener = {
-    onCreate(chid) { console.log(`EVENT FIRED: onCreate: ${chid}`); $('#mystart').prop( "disabled", true ); $('#mystop').prop( "disabled", false ); },
-    onJoin(chid) { console.log(`EVENT FIRED: onJoin: ${chid}`); },
-    onClose() { 
-      console.log('EVENT FIRED: onClose'); 
-      $('#mystart').prop( "disabled", false ); 
-      $('#mystop').prop( "disabled", true ); 
-      document.querySelector('#localVideo').srcObject=null;
-      remon.close();
-      remon = new Remon({ config, listener });
-    },
-    onError(error) { console.log(`EVENT FIRED: onError: ${error}`); },
-    onStat(result) { console.log(`EVENT FIRED: onStat: ${result}`); }
-  };
-
-  remon = new Remon({ config, listener });
-
-  $('#mystop').click(function(){
+const listener = {
+  onCreate(chid) { 
+    console.log(`EVENT FIRED: onCreate: ${chid}`); $('#mystart').prop( "disabled", true ); $('#mystop').prop( "disabled", false );
+  },
+  onJoin(chid) { 
+    console.log(`EVENT FIRED: onJoin: ${chid}`); 
+  },
+  onClose() { 
+    console.log('EVENT FIRED: onClose'); 
+    $('#mystart').prop( "disabled", false ); 
+    $('#mystop').prop( "disabled", true ); 
+    document.querySelector('#localVideo').srcObject=null;
     remon.close();
-  });
+    remon = new Remon({ config, listener });
+  },
+  onError(error) { 
+    console.log(`EVENT FIRED: onError: ${error}`); 
+  },
+  onStat(result) { 
+    console.log(`EVENT FIRED: onStat: ${result}`); 
+  }
+};
 
-  $('#mystart').click(function(){
-    // createCast의 인자는 방송채널의 ID입니다. 실제 서비스에서는 동일한 방송채널의 ID가 아닌, 고유하고 예측이 어려운 ID를 사용해야합니다.
-    remon.createCast("my-first-livestreaming");
+
+$('#mystop').click(function(){
+  remon.close();
+  remon.config.rtc.localStream.getTracks().forEach(function (track) {
+    track.stop();
   });
+  document.querySelector(remon.config.view.local).srcObject=undefined;
+});
+
+$('#mystart').click(function(){
+  // createCast의 인자는 방송채널의 ID입니다. 실제 서비스에서는 동일한 방송채널의 ID가 아닌, 고유하고 예측이 어려운 ID를 사용해야합니다.
+  remon = new Remon({ config, listener });
+  remon.createCast("my-first-livestreaming");
+});
+
+var apply = (w, h, f)  => remon.config.rtc.localStream.getTracks()[1]
+  .applyConstraints({ width: w, height: h, frameRate: { ideal: f } })
+  .then(() => log("Applied "+ w +" x "+ h + " f " + f))
+    .catch(failed);
+
+var repeat = (ms, func) => new Promise(r => setInterval(func, ms));
+var log = msg => div.innerHTML += "<p>" + msg + "</p>";
+var update = msg => div2.innerHTML = "<p>" + msg + "</p>";
+var failed = e => log(e +" constraint="+ e.constraint+", line "+ e.lineNumber);
 
   </script>
 </body>
