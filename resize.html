@@ -63,7 +63,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
   <script>
 let remon;
-let track;
+let oldVideoTrack, newVideoTrack;
 
 const config = {
   credential: {
@@ -119,9 +119,12 @@ var apply = (w, h, f)  => remon.config.rtc.localStream.getTracks()[1]
     .catch(failed);
 
 var apply2 = (w, h, f)  => {
-  let oldTrack = remon.config.rtc.localStream.getTracks()[1];
+  oldVideoTrack = remon.config.rtc.localStream.getTracks()[1];
   navigator.mediaDevices.getUserMedia({ video: { width: w, height: h, frameRate: { ideal: f } }, audio: false })
-  .then(stream => remon.context.videoTransceiver.sender.replaceTrack(stream.getVideoTracks()[0]))
+  .then(stream => {
+    newVideoTrack = stream.getVideoTracks()[0];
+    remon.context.videoTransceiver.sender.replaceTrack(stream.getVideoTracks()[0]);
+  })
   .then(() => log("Applied "+ w +" x "+ h + " f " + f))
     .catch(failed);
   // oldTrack.stop();
