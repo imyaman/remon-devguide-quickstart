@@ -130,10 +130,12 @@ var apply2 = (w, h, f)  => {
     document.querySelector(remon.config.view.local).srcObject.addTrack(newVideoTrack);
     document.querySelector(remon.config.view.local).srcObject.removeTrack(oldVideoTrack);
 
-    remon.context.videoTransceiver.sender.replaceTrack(newVideoTrack);
+    remon.context.videoTransceiver.sender.replaceTrack(newVideoTrack)
+    .then( 
+      /* 중요: 명시적으로 끄지 않으면, close를 호출해도 여전히 카메라가 켜져 있다 */
+      oldVideoTrack.stop() 
+    );
 
-    /* 중요: 명시적으로 끄지 않으면, close를 호출해도 여전히 카메라가 켜져 있다 */
-    oldVideoTrack.stop();
   })
   .then(() => log("Applied "+ w +" x "+ h + " f " + f))
     .catch(failed);
