@@ -109,7 +109,7 @@ function changeCamWidthHeightFPS2 (myremon, w, h, f) {
     })
   })
   .catch(error => { console.error('changeCamWidthHeightFPS2 failure : ' +error); });
-  return(getCamWidthHeightFPS());
+  return(getCamWidthHeightFPS(myremon));
 }
 
 
