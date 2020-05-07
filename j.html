@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>J Simple Example</title>
+  <style>
+    #mymain { 
+      margin-left: auto; margin-right: auto; width: 320px; 
+    }
+    #wingleft { 
+    }
+    #wingright { 
+    }
+    #localVideo { 
+      width: 320px; height: 240px; background-color: black; 
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+</head>
+<body>
+  <div id="wingleft"></div>
+  <div id="mymain">
+    <h2>방송</h2>
+    <div>
+      <button id="mystart" class="btn btn-main">Start</button> <span> </span>
+      <button id="mystop" class="btn btn-main" disabled>Stop</button>
+      <br> <br>
+    </div>
+    <div>
+      모니터
+      <video id="localVideo" class="remote-video " autoplay muted></video>
+      <br> <br>
+    </div>
+    <div>
+      방식1 (Stream의 constraint 변경, 지연 있음)<br>
+      <button id="b11" onclick="apply(160,120, 1)">160p, 1fps</button>
+      <button id="b12" onclick="apply(320,240, 8)">320p, 8fps</button>
+      <button id="b13" onclick="apply(640,480, 16)">640p, 16fps</button>
+      <button id="b14" onclick="apply(1280,720, 24)">720p, 24fps</button>
+      <button id="b15" onclick="apply(1920,1080, 30)">1280p, 30fps</button>
+      <br> <br> <br>
+    </div>
+    <div>
+      방식2 (RTCRtpSender의 track 변경, 지연 없음)<br>
+      <button id="b21" onclick="apply2(160,120, 1)">160p, 1fps</button>
+      <button id="b22" onclick="apply2(320,240, 8)">320p, 8fps</button>
+      <button id="b23" onclick="apply2(640,480, 16)">640p, 16fps</button>
+      <button id="b24" onclick="apply2(1280,720, 24)">720p, 24fps</button>
+      <button id="b25" onclick="apply2(1920,1080, 30)">1280p, 30fps</button>
+      <br> <br> <br>
+    </div>
+    <div>
+      <button id="b7" onclick="off()">Cam Off</button><br>
+      <div id="logArea"></div>
+      <div id="currentSize"><p>0 x 0 x 0.0</p></div>
+    </div>
+  </div>
+  <div id="wingright"></div>
+
+  <script src="https://meet.jit.si/libs/lib-jitsi-meet.min.js"></script>
+  <script>
+
+  </script>
+</body>
+</html>

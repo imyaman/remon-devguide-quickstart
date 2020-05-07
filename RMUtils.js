@@ -24,14 +24,6 @@ function toggleMicEnabled (myremon) {
   return isMicEnabled(myremon);
 }
 
-function getCurrentCamDeviceId (myremon) {
-  if(! myremon.config.rtc.localStream){
-    return false;
-  }
-
-  return myremon.config.rtc.localStream.getVideoTracks()[0].getCapabilities().deviceId;
-}
-
 function getCamWidthHeightFPS (myremon) {
   if(! myremon.config.rtc.localStream){
     return false;
@@ -43,6 +35,17 @@ function getCamWidthHeightFPS (myremon) {
   let f = mysettings.frameRate;
 
   return { width: w, height: h, fps: f };
+}
+
+function changeCamWidthHeightFPS (myremon, w, h, f) {
+  if(! myremon.config.rtc.localStream){
+    return false;
+  }
+  let currentSettings = getCamWidthHeightFPS(myremon);
+  myremon.config.rtc.localStream.getVideoTracks()[0]
+    .applyConstraints({ width: { ideal: w }, height: { ideal: h }, frameRate: { ideal: f } })
+    .then(()=> {console.info(getCamWidthHeightFPS(myremon));} )
+      .catch(error => { console.error('changeCamWidthHeightFPS failure : ' + error ) } );
 }
 
 function changeCamWidthHeight (myremon, w, h) {
@@ -70,15 +73,23 @@ function changeCamFPS (myremon, f) {
       .catch(error => { console.error('changeCamFPS failure : ' + error ) } );
 }
 
-function changeCamWidthHeightFPS (myremon, w, h, f) {
+function cleanupRemon (myremon) {
+  if(myremon.config.view.local) {
+    document.querySelector(myremon.config.view.local).srcObject=undefined;
+  }
+  if(remon.config.rtc.localStream){
+    myremon.config.rtc.localStream.getTracks().forEach(function (track) {
+      track.stop();
+    });
+  }
+}
+
+function getCurrentCamDeviceId (myremon) {
   if(! myremon.config.rtc.localStream){
     return false;
   }
-  let currentSettings = getCamWidthHeightFPS(myremon);
-  myremon.config.rtc.localStream.getVideoTracks()[0]
-    .applyConstraints({ width: { ideal: w }, height: { ideal: h }, frameRate: { ideal: f } })
-    .then(()=> {console.info(getCamWidthHeightFPS(myremon));} )
-      .catch(error => { console.error('changeCamWidthHeightFPS failure : ' + error ) } );
+
+  return myremon.config.rtc.localStream.getVideoTracks()[0].getCapabilities().deviceId;
 }
 
 function changeCamWidthHeightFPS2 (myremon, w, h, f) {
@@ -110,16 +121,4 @@ function changeCamWidthHeightFPS2 (myremon, w, h, f) {
   })
   .catch(error => { console.error('changeCamWidthHeightFPS2 failure : ' +error); });
   return(getCamWidthHeightFPS(myremon));
-}
-
-
-function cleanupRemon (myremon) {
-  if(myremon.config.view.local) {
-    document.querySelector(myremon.config.view.local).srcObject=undefined;
-  }
-  if(remon.config.rtc.localStream){
-    myremon.config.rtc.localStream.getTracks().forEach(function (track) {
-      track.stop();
-    });
-  }
 }
