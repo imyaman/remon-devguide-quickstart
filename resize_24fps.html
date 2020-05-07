@@ -169,18 +169,18 @@ var failed = e => log(e +" constraint="+ e.constraint+", line "+ e.lineNumber);
 var toggleCam = (myremon) => {
   let enabled = myremon.config.rtc.localStream.getVideoTracks()[0].enabled;
   if(enabled){
-    myremon.pauseLocalVideo(false); // false가 아니고 true여야하지만 SDK가 그렇게 돼있음
+    myremon.pauseLocalVideo(false); // camera를 끔, true/false 주의
   }else{
-    myremon.pauseLocalVideo(true); // true가 아니고 false여야하지만 SDK가 그렇게 돼있음
+    myremon.pauseLocalVideo(true); // camera를 켬, true/false 주의
   }
 }
 
 var toggleMic = (myremon) => {
   let enabled = myremon.config.rtc.localStream.getAudioTracks()[0].enabled;
   if(enabled){
-    myremon.muteLocalAudio(false);
+    myremon.muteLocalAudio(true); // mic를 끔, true/false 주의
   }else{
-    myremon.muteLocalAudio(true);
+    myremon.muteLocalAudio(false); // mic를 켬, true/false 주의
   }
 }
 
