@@ -49,7 +49,6 @@ function changeCamWidthHeight (myremon, w, h) {
   if(! myremon.config.rtc.localStream){
     return false;
   }
-  let deviceId = getCurrentCamDeviceId(myremon);
   let currentSettings = getCamWidthHeightFPS(myremon);
   let f = currentSettings.f;
   myremon.config.rtc.localStream.getVideoTracks()[0]
