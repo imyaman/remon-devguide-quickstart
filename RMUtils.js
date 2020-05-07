@@ -81,6 +81,38 @@ function changeCamWidthHeightFPS (myremon, w, h, f) {
       .catch(error => { console.error('changeCamWidthHeightFPS failure : ' + error ) } );
 }
 
+function changeCamWidthHeightFPS2 (myremon, w, h, f) {
+  if(! myremon.config.rtc.localStream){
+    return false;
+  }
+  let currentCamDeviceId = getCurrentCamDeviceId(myremon);
+  let oldVideoTrack;
+  let newVideoTrack;
+
+  oldVideoTrack = myremon.config.rtc.localStream.getVideoTracks()[0];
+
+  navigator.mediaDevices.getUserMedia(
+    { 
+      sendonly: true, 
+      video: { deviceId: currentCamDeviceId, width: { ideal: w }, height: { ideal: h }, frameRate: { ideal: f } }, 
+      audio: false 
+    }
+  )
+  .then(stream => {
+    newVideoTrack = stream.getVideoTracks()[0];
+    myremon.context.videoTransceiver.sender.replaceTrack(newVideoTrack)
+    .then(()=>{
+      if(myremon.config.view.local){
+        document.querySelector(myremon.config.view.local).srcObject.addTrack(newVideoTrack);
+        document.querySelector(myremon.config.view.local).srcObject.removeTrack(oldVideoTrack);
+      }
+    })
+  })
+  .catch(error => { console.error('changeCamWidthHeightFPS2 failure : ' +error); });
+  return(getCamWidthHeightFPS());
+}
+
+
 function cleanupRemon (myremon) {
   if(myremon.config.view.local) {
     document.querySelector(myremon.config.view.local).srcObject=undefined;
