@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RemoteMonster - Simple Example</title>
+  <style>
+    #mymain { 
+      margin-left: auto; margin-right: auto; width: 320px; 
+    }
+    #wingleft { 
+    }
+    #wingright { 
+    }
+    #localVideo { 
+      width: 320px; height: 240px; background-color: black; 
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+</head>
+<body>
+  <div id="wingleft"></div>
+  <div id="mymain">
+    <h2>방송</h2>
+    <div>
+      <button id="mystart" class="btn btn-main">Start</button> <span> </span>
+      <button id="mystop" class="btn btn-main" disabled>Stop</button>
+      <br> <br>
+    </div>
+    <div>
+      모니터
+      <video id="localVideo" class="remote-video " autoplay muted></video>
+      <br> <br>
+    </div>
+    <div>
+      방식1 (Stream의 constraint 변경, 지연 있음)<br>
+      <button id="b11" onclick="apply(remon, 160,120, 24)">160p, 24fps</button>
+      <button id="b12" onclick="apply(remon, 320,240, 24)">320p, 24fps</button>
+      <button id="b13" onclick="apply(remon, 640,480, 24)">640p, 24fps</button>
+      <button id="b14" onclick="apply(remon, 1280,720, 24)">720p, 24fps</button>
+      <button id="b15" onclick="apply(remon, 1920,1080, 24)">1280p, 24fps</button>
+      <br> <br> <br>
+    </div>
+    <div>
+      방식2 (RTCRtpSender의 track 변경, 지연 없음)<br>
+      <button id="b21" onclick="apply2(remon, 160,120, 24)">160p, 24fps</button>
+      <button id="b22" onclick="apply2(remon, 320,240, 24)">320p, 24fps</button>
+      <button id="b23" onclick="apply2(remon, 640,480, 24)">640p, 24fps</button>
+      <button id="b24" onclick="apply2(remon, 1280,720, 24)">720p, 24fps</button>
+      <button id="b25" onclick="apply2(remon, 1920,1080, 24)">1280p, 24fps</button>
+      <br> <br> <br>
+    </div>
+    <div>
+      <button id="b91" onclick="toggleCamEnabled(remon)">Cam Off</button><br>
+      <button id="b92" onclick="toggleMicEnabled(remon)">Mic Off</button><br>
+      <div id="logArea"></div>
+      <div id="currentSize"><p>0 x 0 x 0.0</p></div>
+    </div>
+  </div>
+  <div id="wingright"></div>
+
+  <script src="adapter-latest.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@remotemonster/sdk/remon.min.js"></script>
+  <script src="RMUtils.js"></script>
+  <script>
+let remon;
+
+const config = {
+  credential: {
+    serviceId: 'sangyong.gwak@devopskorea.org',
+    key: '4caa69d31d429f72fcb411ee9ce313365439639365c4c981'
+  },
+  view: {
+    local: '#localVideo'
+  },
+  media: {
+    sendonly: true,
+    video: true,
+    audio: true
+  }
+};
+
+const listener = {
+  onCreate(chid) { 
+    console.log(`EVENT FIRED: onCreate: ${chid}`); $('#mystart').prop( "disabled", true ); $('#mystop').prop( "disabled", false );
+  },
+  onJoin(chid) { 
+    console.log(`EVENT FIRED: onJoin: ${chid}`); 
+  },
+  onClose() { 
+    console.log('EVENT FIRED: onClose'); 
+    $('#mystart').prop( "disabled", false ); 
+    $('#mystop').prop( "disabled", true ); 
+    document.querySelector('#localVideo').srcObject=null;
+    remon.close();
+    remon = new Remon({ config, listener });
+  },
+  onError(error) { 
+    console.log(`EVENT FIRED: onError: ${error}`); 
+  },
+  onStat(result) { 
+    console.log(`EVENT FIRED: onStat: ${result}`); 
+  }
+};
+
+
+$('#mystop').click(function(){
+  remon.close();
+  remon.config.rtc.localStream.getTracks().forEach(function (track) {
+    track.stop();
+  });
+  document.querySelector(remon.config.view.local).srcObject=undefined;
+});
+
+$('#mystart').click(function(){
+  // createCast의 인자는 방송채널의 ID입니다. 실제 서비스에서는 동일한 방송채널의 ID가 아닌, 고유하고 예측이 어려운 ID를 사용해야합니다.
+  remon = new Remon({ config, listener });
+  remon.createCast("my-first-livestreaming");
+});
+
+var apply = (r, w, h, f)  => {
+  changeCamWidthHeightFPS(r, w, h, f);
+}
+
+var apply2 = (r, w, h, f)  => {
+  changeCamWidthHeightFPS(r, w, h, f);
+}
+
+  </script>
+</body>
+</html>
