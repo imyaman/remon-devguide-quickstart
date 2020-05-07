@@ -12,7 +12,7 @@ function toggleCamEnabled (myremon) {
   } else {
     myremon.pauseLocalVideo(true); // camera를 켬, true/false 주의
   }
-  return getCamStatus(myremon);
+  return isCamEnabled(myremon);
 }
 
 function toggleMicEnabled (myremon) {
@@ -21,7 +21,7 @@ function toggleMicEnabled (myremon) {
   } else {
     myremon.muteLocalAudio(false); // mic를 켬, true/false 주의
   }
-  return getMicStatus(myremon);
+  return isMicEnabled(myremon);
 }
 
 
