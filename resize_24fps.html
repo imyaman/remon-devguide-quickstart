@@ -52,7 +52,8 @@
       <br> <br> <br>
     </div>
     <div>
-      <button id="b7" onclick="off()">Cam Off</button><br>
+      <button id="b91" onclick="toggleCam(remon)">Cam Off</button><br>
+      <button id="b92" onclick="toggleMic(remon)">Mic Off</button><br>
       <div id="logArea"></div>
       <div id="currentSize"><p>0 x 0 x 0.0</p></div>
     </div>
@@ -73,6 +74,11 @@ const config = {
   },
   view: {
     local: '#localVideo'
+  },
+  media: {
+    sendonly: true,
+    video: true,
+    audio: true
   }
 };
 
@@ -159,6 +165,24 @@ var repeat = (ms, func) => new Promise(r => setInterval(func, ms));
 var log = msg => logArea.innerHTML += "<p>" + msg + "</p>";
 var update = msg => currentSize.innerHTML = "<p>" + msg + "</p>";
 var failed = e => log(e +" constraint="+ e.constraint+", line "+ e.lineNumber);
+
+var toggleCam = (myremon) => {
+  let enabled = myremon.config.rtc.localStream.getVideoTracks()[0].enabled;
+  if(enabled){
+    myremon.pauseLocalVideo(false); // false가 아니고 true여야하지만 SDK가 그렇게 돼있음
+  }else{
+    myremon.pauseLocalVideo(true); // true가 아니고 false여야하지만 SDK가 그렇게 돼있음
+  }
+}
+
+var toggleMic = (myremon) => {
+  let enabled = myremon.config.rtc.localStream.getAudioTracks()[0].enabled;
+  if(enabled){
+    myremon.muteLocalAudio(false);
+  }else{
+    myremon.muteLocalAudio(true);
+  }
+}
 
   </script>
 </body>
