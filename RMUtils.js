@@ -55,7 +55,7 @@ function changeCamWidthHeight (myremon, w, h) {
   myremon.config.rtc.localStream.getVideoTracks()[0]
     .applyConstraints({ width: { ideal: w }, height: { ideal: h }, frameRate: { ideal: f } })
     .then(()=> {console.info(getCamWidthHeightFPS(myremon));} )
-      .catch(error => { console.error('changeCamWidthHeight failure' + error ) } );
+      .catch(error => { console.error('changeCamWidthHeight failure : ' + error ) } );
 }
 
 function changeCamFPS (myremon, f) {
@@ -68,7 +68,7 @@ function changeCamFPS (myremon, f) {
   myremon.config.rtc.localStream.getVideoTracks()[0]
     .applyConstraints({ width: { ideal: w }, height: { ideal: h }, frameRate: { ideal: f } })
     .then(()=> {console.info(getCamWidthHeightFPS(myremon));} )
-      .catch(error => { console.error('changeCamFPS failure' + error ) } );
+      .catch(error => { console.error('changeCamFPS failure : ' + error ) } );
 }
 
 function changeCamWidthHeightFPS (myremon, w, h, f) {
@@ -79,7 +79,7 @@ function changeCamWidthHeightFPS (myremon, w, h, f) {
   myremon.config.rtc.localStream.getVideoTracks()[0]
     .applyConstraints({ width: { ideal: w }, height: { ideal: h }, frameRate: { ideal: f } })
     .then(()=> {console.info(getCamWidthHeightFPS(myremon));} )
-      .catch(error => { console.error('changeCamWidthHeightFPS failure' + error ) } );
+      .catch(error => { console.error('changeCamWidthHeightFPS failure : ' + error ) } );
 }
 
 function cleanupRemon (myremon) {
