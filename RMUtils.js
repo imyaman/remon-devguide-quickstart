@@ -64,8 +64,9 @@ function changeCamWidthHeightFPS (myremon, w, h, f) {
 
 function cleanupRemon (myremon) {
   document.querySelector(myremon.config.view.local).srcObject=undefined;
-  myremon.config.rtc.localStream.getTracks().forEach(function (track) {
-    track.stop();
-  });
-  myremon=undefined;
+  if(remon.config.rtc.localStream){
+    myremon.config.rtc.localStream.getTracks().forEach(function (track) {
+      track.stop();
+    });
+  }
 }
