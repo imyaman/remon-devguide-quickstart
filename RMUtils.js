@@ -40,7 +40,7 @@ function changeCamWidthHeight (myremon, w, h) {
   let currentFPS = currentSettings.f;
   myremon.config.rtc.localStream.getVideoTracks()[0]
     .applyConstraints({ width: w, height: h, frameRate: { ideal: currentFPS } })
-    .then(()=> return getCamWidthHeightFPS(myremon) )
+    .then(()=> {console.info(getCamWidthHeightFPS(myremon);} )
       .catch( console.error('changeCamWidthHeight failure') );
 }
 
