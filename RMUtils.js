@@ -29,7 +29,7 @@ function getCamWidthHeightFPS (myremon) {
     return false;
   }
 
-  let mysettings = remon.config.rtc.localStream.getVideoTracks()[0].getSettings();
+  let mysettings = myremon.config.rtc.localStream.getVideoTracks()[0].getSettings();
   let w = mysettings.width;
   let h = mysettings.height;
   let f = mysettings.frameRate;
